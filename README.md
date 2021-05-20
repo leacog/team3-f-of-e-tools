@@ -6,7 +6,7 @@ The project is organized and run by the [Physical Computation Laboratory](http:/
 ## Cloning the Repository 
 The correct way to clone this repository to get the hardware and firmware submodules is:
 
-	git clone --recursive https://github.com/f-of-e/f-of-e-tools.git
+	git clone --recursive https://github.com/leacog/team3-f-of-e-tools.git
 
 To update all submodules
 
