@@ -1,5 +1,5 @@
 rm DSPalu
 rm DSPalu.vcd
 
-iverilog -o DSPalu DSP_alu.v DSPalu_sim.v DSPadder.v DSPsubtractor.v alu_control.v SB_MAC16.v
+iverilog -o DSPalu ../../sail-core/verilog/DSPalu.v DSPalu_sim.v ../../sail-core/verilog/DSPadder.v ../../sail-core/verilog/DSPsubtractor.v ../../sail-core/verilog/alu_control.v SB_MAC16.v
 ./DSPalu
