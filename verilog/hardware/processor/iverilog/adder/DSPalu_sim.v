@@ -18,7 +18,7 @@ module top();
 		.Opcode(Opcode)
 	);
 
-	alu alu_inst(
+	DSPalu alu_inst(
 		.ALUctl(AluCtl_wire),
 		.A(A),
 		.B(B),

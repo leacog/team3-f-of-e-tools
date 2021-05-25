@@ -45,7 +45,7 @@
 
 
 
-module DSPadder(input1, input2, out); // out = input1 - input2
+module DSPsubtractor(input1, input2, out); // out = input1 - input2
 	//Input and output should remain the same to perserve interface, need to change the add operation.
 	input [31:0]	input1;
 	input [31:0]	input2;
@@ -59,26 +59,26 @@ module DSPadder(input1, input2, out); // out = input1 - input2
 		.D(input2[15:0]),
 		.O(out),
 		.CLK(), 							// Clock not connected - asynchronus operation for now
-		.CE(0), 							// Clock disabled
-		.IRSTTOP(0),					// Reset for input and output accumulators - not in use
-		.IRSTBOT(0),	
-		.ORSTTOP(0),
-		.ORSTBOT(0),
-		.AHOLD(0),						//Hold register values - don't care since registers are not in use for asyncronys operation
-		.BHOLD(0),
-		.CHOLD(0),
-		.DHOLD(0),
-		.OHOLDTOP(0),
-		.OHOLDBOT(0),
-		.OLOADTOP(0),
-		.OLOADBOT(0),
-		.ADDSUBTOP(1), 				// 0 for add, 1 for sub
-		.ADDSUBBOT(1),				// --||--
+		.CE(1'b0), 							// Clock disabled
+		.IRSTTOP(1'b0),					// Reset for input and output accumulators - not in use
+		.IRSTBOT(1'b0),	
+		.ORSTTOP(1'b0),
+		.ORSTBOT(1'b0),
+		.AHOLD(1'b0),						//Hold register values - don't care since registers are not in use for asyncronys operation
+		.BHOLD(1'b0),
+		.CHOLD(1'b0),
+		.DHOLD(1'b0),
+		.OHOLDTOP(1'b0),
+		.OHOLDBOT(1'b0),
+		.OLOADTOP(1'b0),
+		.OLOADBOT(1'b0),
+		.ADDSUBTOP(1'b1), 				// 0 for add, 1 for sub
+		.ADDSUBBOT(1'b1),				// --||--
 		.CO(),         				// Carry output, could be used to indicate overflow in the future
-		.CI(0),								// Carry input to lower adder, set to zero
-		.ACCUMCI(0),					// Could be used for feedback? implementing other logic functions?
+		.CI(1'b0),								// Carry input to lower adder, set to zero
+		.ACCUMCI(1'b0),					// Could be used for feedback? implementing other logic functions?
 		.ACCUMCO(),						// Top accumulator output - not connected
-		.SIGNEXTIN(0), 				// Sign extension - not used 
+		.SIGNEXTIN(1'b0), 				// Sign extension - not used 
 		.SIGNEXTOUT()					// Sign extension outut - not connected
 		);
 		
