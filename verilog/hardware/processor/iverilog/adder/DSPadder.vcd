@@ -1,0 +1,235 @@
+$date
+	Tue May 25 12:02:23 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module top $end
+$var wire 32 ! data_out [31:0] $end
+$var reg 1 " clk $end
+$var reg 32 # input1 [31:0] $end
+$var reg 32 $ input2 [31:0] $end
+$scope module adder_inst $end
+$var wire 32 % input1 [31:0] $end
+$var wire 32 & input2 [31:0] $end
+$var wire 32 ' out [31:0] $end
+$scope module i_sbmac16 $end
+$var wire 16 ( A [15:0] $end
+$var wire 1 ) ACCUMCI $end
+$var wire 1 * ADDSUBBOT $end
+$var wire 1 + ADDSUBTOP $end
+$var wire 1 , AHOLD $end
+$var wire 16 - B [15:0] $end
+$var wire 1 . BHOLD $end
+$var wire 16 / C [15:0] $end
+$var wire 1 0 CE $end
+$var wire 1 1 CHOLD $end
+$var wire 1 2 CI $end
+$var wire 1 3 CLK $end
+$var wire 1 4 CO $end
+$var wire 16 5 D [15:0] $end
+$var wire 1 6 DHOLD $end
+$var wire 1 7 HCI $end
+$var wire 1 8 IRSTBOT $end
+$var wire 1 9 IRSTTOP $end
+$var wire 1 : LCI $end
+$var wire 1 ; OHOLDBOT $end
+$var wire 1 < OHOLDTOP $end
+$var wire 1 = OLOADBOT $end
+$var wire 1 > OLOADTOP $end
+$var wire 1 ? ORSTBOT $end
+$var wire 1 @ ORSTTOP $end
+$var wire 16 A Oh [15:0] $end
+$var wire 16 B Ol [15:0] $end
+$var wire 1 C SIGNEXTIN $end
+$var wire 1 D clock $end
+$var wire 16 E iA [15:0] $end
+$var wire 16 F iB [15:0] $end
+$var wire 16 G iC [15:0] $end
+$var wire 16 H iD [15:0] $end
+$var wire 32 I iH [31:0] $end
+$var wire 16 J iP [15:0] $end
+$var wire 16 K iQ [15:0] $end
+$var wire 16 L iR [15:0] $end
+$var wire 16 M iS [15:0] $end
+$var wire 16 N iW [15:0] $end
+$var wire 16 O iX [15:0] $end
+$var wire 16 P iY [15:0] $end
+$var wire 16 Q iZ [15:0] $end
+$var wire 16 R p_Al_Bl [15:0] $end
+$var wire 16 S p_Al_Bh [15:0] $end
+$var wire 16 T p_Ah_Bl [15:0] $end
+$var wire 16 U p_Ah_Bh [15:0] $end
+$var wire 32 V iL [31:0] $end
+$var wire 24 W iK_e [23:0] $end
+$var wire 16 X iK [15:0] $end
+$var wire 24 Y iJ_e [23:0] $end
+$var wire 16 Z iJ [15:0] $end
+$var wire 16 [ iG [15:0] $end
+$var wire 16 \ iF [15:0] $end
+$var wire 16 ] YZ [15:0] $end
+$var wire 16 ^ XW [15:0] $end
+$var wire 1 _ SIGNEXTOUT $end
+$var wire 32 ` O [31:0] $end
+$var wire 1 a LCO $end
+$var wire 16 b Bl [15:0] $end
+$var wire 16 c Bh [15:0] $end
+$var wire 16 d Al [15:0] $end
+$var wire 16 e Ah [15:0] $end
+$var wire 1 f ACCUMCO $end
+$var reg 16 g rA [15:0] $end
+$var reg 16 h rB [15:0] $end
+$var reg 16 i rC [15:0] $end
+$var reg 16 j rD [15:0] $end
+$var reg 16 k rF [15:0] $end
+$var reg 16 l rG [15:0] $end
+$var reg 32 m rH [31:0] $end
+$var reg 16 n rJ [15:0] $end
+$var reg 16 o rK [15:0] $end
+$var reg 16 p rQ [15:0] $end
+$var reg 16 q rS [15:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx q
+bx p
+bx o
+bx n
+bx m
+bx l
+bx k
+bx j
+bx i
+bx h
+bx g
+0f
+b0 e
+b0 d
+b0 c
+b0 b
+0a
+b0 `
+0_
+b0 ^
+b0 ]
+bx \
+bx [
+bx Z
+b0xxxxxxxxxxxxxxxx Y
+bx X
+b0xxxxxxxxxxxxxxxx W
+bx V
+b0 U
+b0 T
+b0 S
+b0 R
+b0 Q
+b0 P
+b0 O
+b0 N
+bx M
+b0 L
+bx K
+b0 J
+bx I
+b0 H
+b0 G
+b0 F
+b0 E
+xD
+0C
+b0 B
+b0 A
+0@
+0?
+0>
+0=
+0<
+0;
+0:
+09
+08
+07
+06
+b0 5
+04
+z3
+02
+01
+00
+b0 /
+0.
+b0 -
+0,
+0+
+0*
+0)
+b0 (
+b0 '
+b0 &
+b0 %
+b0 $
+b0 #
+0"
+b0 !
+$end
+#1
+1"
+#2
+0"
+#3
+1"
+#4
+0"
+#5
+b1010 !
+b1010 '
+b1010 `
+b1010 B
+b1010 L
+b1010 ]
+b1010 P
+b1010 H
+b1010 5
+1"
+b1010 $
+b1010 &
+#6
+0"
+#7
+1"
+#8
+0"
+#9
+1"
+#10
+b1111110010 !
+b1111110010 '
+b1111110010 `
+b1111110010 B
+b1111110010 L
+b1111110010 ]
+b11 c
+b11101000 b
+b1111101000 Q
+b1111101000 F
+b1111101000 -
+0"
+b1111101000 #
+b1111101000 %
+#11
+1"
+#12
+0"
+#13
+1"
+#14
+0"
+#15
+1"
