@@ -53,10 +53,10 @@ module DSPsubtractor(input1, input2, out); // out = input1 - input2
 
 	SB_MAC16 i_sbmac16 ( 		
 		//Taken directly from SBTICE datasheet - defines connection to, from and inside DSP block
-		.A(input1[31:16]),
-		.B(input1[15:0]),
-		.C(input2[31:16]),
-		.D(input2[15:0]),
+		.A(input2[31:16]),
+		.B(input2[15:0]),
+		.C(input1[31:16]),
+		.D(input1[15:0]),
 		.O(out),
 		.CLK(), 							// Clock not connected - asynchronus operation for now
 		.CE(1'b0), 							// Clock disabled
