@@ -10,6 +10,7 @@
 #include "sh7708.h"
 #include "devscc.h"
 #include "print.h"
+#include "LFinput.h"
 
 /* 
  * From https://www.dsprelated.com/freebooks/filters/Simplest_Lowpass_Filter_I.html 
@@ -40,8 +41,7 @@ void xudelay(ulong usecs)
 
 double devsignal_read(int which)
 {
-	ulong   sensor_shift_offset = (which & 0xFFF) << 2;
-	return *(SENSOR_READ + sensor_shift_offset);
+	return LF_input[which];
 }
 
 int
@@ -61,7 +61,7 @@ main(void)
 		/* 
 		 * Read sensor readings from sigsrc 0 which is the x-axis accelerometer readings
 		 */
-    		xBuffer[j] = devsignal_read(0);
+    		xBuffer[j] = devsignal_read(j);
 		/*	
 		 *	Please note that sigsrc simulates a real signal which changes in time. 
 		 *	The value returned by devsignal_read() will be different at different simulation times.
