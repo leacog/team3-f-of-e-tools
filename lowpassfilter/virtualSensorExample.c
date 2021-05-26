@@ -8,12 +8,12 @@
 #include "devsim7708.h"
 #include "sh7708.h"
 #include "devscc.h"
-#include "../../port/devrtc.h"
-#include "../../port/devexcp.h"
-#include "../../port/devlog.h"
-#include "../../port/devloc.h"
-#include "../../port/devsensor.h"
-#include "../../port/misc.h"
+#include "port/devrtc.h"
+#include "port/devexcp.h"
+#include "port/devlog.h"
+#include "port/devloc.h"
+#include "port/devsensor.h"
+#include "port/misc.h"
 #include "print.h"
 
 /* 
