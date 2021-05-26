@@ -4,21 +4,18 @@
 #include <limits.h>
 #include <stdbool.h>
 #include "sf-types.h"
+#include "e-types.h"
 #include "tag.h"
 #include "devsim7708.h"
 #include "sh7708.h"
 #include "devscc.h"
-#include "port/devrtc.h"
-#include "port/devexcp.h"
-#include "port/devlog.h"
-#include "port/devloc.h"
-#include "port/devsensor.h"
-#include "port/misc.h"
 #include "print.h"
 
 /* 
  * From https://www.dsprelated.com/freebooks/filters/Simplest_Lowpass_Filter_I.html 
  */
+
+#define	CALIBRATE	8 /*	Calibrated to give you ~correct delay @ 60MHz	*/
 
 float 
 LowPassFilter(float *in, float *out, int N, double in0)
@@ -29,6 +26,22 @@ LowPassFilter(float *in, float *out, int N, double in0)
 		out[n] =  in[n]  + in[n-1];
 	}
 	return in[N-1];
+}
+
+void xudelay(ulong usecs)
+{
+	volatile int	max, i;
+
+	max = CALIBRATE * usecs;
+	for (i = 0; i < max; i++)
+	{
+	}
+}
+
+double devsignal_read(int which)
+{
+	ulong   sensor_shift_offset = (which & 0xFFF) << 2;
+	return *(SENSOR_READ + sensor_shift_offset);
 }
 
 int
