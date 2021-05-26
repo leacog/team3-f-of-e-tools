@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <stdbool.h>
 #include "sf-types.h"
-#include "e-types.h"
-#include "tag.h"
-#include "devsim7708.h"
 #include "sh7708.h"
 #include "devscc.h"
 #include "print.h"
