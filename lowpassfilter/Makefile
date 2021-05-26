@@ -4,8 +4,8 @@ include $(TREEROOT)/conf/setup.conf
 TARGET-ARCH	= riscv32-elf
 TARGET		= riscv
 
-PROGRAM	= virtualSensorExample
-PROGRAM-SF	= virtualSensorExample-sf
+PROGRAM	= lpf
+PROGRAM-SF	= lpf-sf
 INIT		= init
 INIT-SF		= init-sf
 
@@ -59,3 +59,4 @@ clean:
 	$(RM) init.i *.o $(PROGRAM) $(PROGRAM).sr $(PROGRAM).map
 	$(RM) init-sf.i *.o $(PROGRAM-SF) $(PROGRAM-SF).sr $(PROGRAM-SF).map
 	$(RM) program.hex data.hex
+
