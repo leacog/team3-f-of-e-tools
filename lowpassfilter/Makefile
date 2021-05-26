@@ -59,4 +59,3 @@ clean:
 	$(RM) init.i *.o $(PROGRAM) $(PROGRAM).sr $(PROGRAM).map
 	$(RM) init-sf.i *.o $(PROGRAM-SF) $(PROGRAM-SF).sr $(PROGRAM-SF).map
 	$(RM) program.hex data.hex
-
