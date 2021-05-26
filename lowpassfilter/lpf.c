@@ -69,7 +69,7 @@ main(void)
 
 	for(int i = 0; i < numberOfSamples; i++)
 	{
-		print("x[%d]=%f\ty[%d]=%f\n",i,xBuffer[i], i, xBufferOut[i]);
+		//print("x[%d]=%f\ty[%d]=%f\n",i,xBuffer[i], i, xBufferOut[i]);
 	}	
 	return 0;
 }
