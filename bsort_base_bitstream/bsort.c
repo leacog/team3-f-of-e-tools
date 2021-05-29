@@ -3,7 +3,7 @@
 #include "string.h"
 #include "softwareblink.h"
 
-uchar bsort_input_copied[bsort_input_len];
+uint bsort_input_copied[20];
 void run(void)
 {
         int i;
