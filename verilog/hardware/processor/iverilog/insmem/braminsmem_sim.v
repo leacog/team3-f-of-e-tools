@@ -1,13 +1,13 @@
 module top();
-	reg clk = 1;
+	reg clk = 0;
 
 	reg[31:0] addr;
 	wire[31:0] out;
 
 	instruction_memory_bram insmem(
+		.clk(clk),
 		.addr(addr),
-		.out(out),
-		.clk(clk)
+		.out(out)
 	);
 
 
@@ -16,7 +16,7 @@ always
  #0.5 clk = ~clk;
 
 initial begin
-	$dumpfile ("insmem.vcd");
+	$dumpfile ("braminsmem.vcd");
  	$dumpvars;
 
  	//reg[31:0] A, B;
@@ -25,23 +25,23 @@ initial begin
 
  	addr = 32'b0;
 
- 	#6
+ 	#5
  	
 	addr = 32'h4;
 
-	#6
+	#5
 	addr = 32'h8;
 
-	#6
+	#5
 	addr = 32'hc;
 
-	#6
+	#5
 	addr = 32'h10;
 
-	#6
+	#5
 	addr = 32'h14;
 
-	#6
+	#5
 
  	$finish;
 end

@@ -19,8 +19,8 @@ initial begin
 	$dumpfile ("DSPadder.vcd");
  	$dumpvars;
 
- 	input1 = 32'd0;
- 	input2 = 32'd0;
+ 	input1 = 32'h2710;
+ 	input2 = 32'h6f;
 
  	#1
 
