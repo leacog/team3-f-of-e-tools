@@ -4,12 +4,13 @@
 #include "string.h"
 #include "softwareblink.h"
 
+uchar bsort_input_copied[bsort_input_len];
 void run(void)
 {
         int i;
         int maxindex = bsort_input_len - 1;
 
-        uchar bsort_input_copied[bsort_input_len];
+       
         memcpy(&bsort_input_copied, &bsort_input, bsort_input_len);
 
         while (maxindex > 0)
