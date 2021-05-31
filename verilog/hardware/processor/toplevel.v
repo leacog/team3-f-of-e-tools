@@ -41,7 +41,7 @@
  *	Top level entity, linking cpu with data and instruction memory.
  */
 
-`include "../include/mods_to_use.v"
+`include "sail-core/include/mods_to_use.v"
 
 module top (led);
 	output [7:0]	led;
@@ -94,7 +94,7 @@ module top (led);
 			.out(inst_out),
 			.clk(clk)
 		);
-	else
+	`else
 		instruction_memory inst_mem( 
 			.addr(inst_in), 
 			.out(inst_out),
