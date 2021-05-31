@@ -1,0 +1,1 @@
+`define USE_ALU_DSP_ADDERS 1'b1

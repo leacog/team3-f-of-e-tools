@@ -1,0 +1,1 @@
+`define USE_ALU_DSP_SUBTRACTOR 1'b1 //Must use subtractor to use comparator

@@ -41,6 +41,8 @@
  *	Top level entity, linking cpu with data and instruction memory.
  */
 
+`include "../include/mods_to_use.v"
+
 module top (led);
 	output [7:0]	led;
 
@@ -86,10 +88,18 @@ module top (led);
 		.data_mem_sign_mask(data_sign_mask)
 	);
 
-	instruction_memory inst_mem( 
-		.addr(inst_in), 
-		.out(inst_out)
-	);
+	`ifdef USE_INSTRUCTION_MEM_BRAM  //Doesn't seem to like nesting inputs and outputs in ifdef statements
+		instruction_memory_bram inst_mem( 
+			.addr(inst_in), 
+			.out(inst_out),
+			.clk(clk)
+		);
+	else
+		instruction_memory inst_mem( 
+			.addr(inst_in), 
+			.out(inst_out),
+		);
+	`endif
 
 	data_mem data_mem_inst(
 			.clk(clk),
