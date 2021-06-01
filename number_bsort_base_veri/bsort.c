@@ -59,8 +59,10 @@ int main(void)
 					if (bsort_input_copied[i] > 10) {
 						*gDebugLedsMemoryMappedRegister = 0x03;
 					}
+					if (bsort_input_copied[i] < 11) {
+						*gDebugLedsMemoryMappedRegister = 0x02;
+					}
 
-					for (int j = 0; j < kSpinDelay*3; j++);
 				}
         }
         return 0;
