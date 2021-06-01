@@ -14,9 +14,11 @@ void run(void)
 
         while (maxindex > 0)
         {
+				*gDebugLedsMemoryMappedRegister = 0xF0;
                 for (i = 0; i < maxindex; i++)
                 {
-					for (int j = 0; j < kSpinDelay * 3; j++);
+					*gDebugLedsMemoryMappedRegister = 0x60;
+					*gDebugLedsMemoryMappedRegister = 0xFF & bsort_input_copied[i];
 					if (bsort_input_copied[i] > bsort_input_copied[i+1])
                         {
                                 /*              swap            */
@@ -24,6 +26,7 @@ void run(void)
                                 bsort_input_copied[i+1] ^= bsort_input_copied[i];
                                 bsort_input_copied[i] ^= bsort_input_copied[i+1];
                         }
+					*gDebugLedsMemoryMappedRegister = 0xFF & bsort_input_copied[i];
                 }
                 maxindex--;
         }
@@ -50,11 +53,11 @@ int main(void)
 {
         while (1)
         {
-                *gDebugLedsMemoryMappedRegister = 0xFF;
+                 *gDebugLedsMemoryMappedRegister = 0xFF;
                 run();
                 *gDebugLedsMemoryMappedRegister = 0x00;
 
-				for (int i = 0; i < 20; i++) {
+				/*for (int i = 0; i < 20; i++) {
 
 					if (bsort_input_copied[i] > 10) {
 						*gDebugLedsMemoryMappedRegister = 0x03;
@@ -64,7 +67,7 @@ int main(void)
 					}
 					*gDebugLedsMemoryMappedRegister = 0xFF & bsort_input_copied[i];
 
-				}
+				}*/
         }
         return 0;
 }
