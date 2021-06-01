@@ -56,6 +56,7 @@ int main(void)
 
 				for (int i = 0; i < 20; i++) {
 					*gDebugLedsMemoryMappedRegister = bsort_input_copied[i];
+					for (int j = 0; j < kSpinDelay*2; j++);
 				}
         }
         return 0;
