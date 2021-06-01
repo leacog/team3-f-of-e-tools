@@ -16,7 +16,8 @@ void run(void)
         {
                 for (i = 0; i < maxindex; i++)
                 {
-                        if (bsort_input_copied[i] > bsort_input_copied[i+1])
+					*gDebugLedsMemoryMappedRegister = bsort_input_copied[i];
+					if (bsort_input_copied[i] > bsort_input_copied[i+1])
                         {
                                 /*              swap            */
                                 bsort_input_copied[i] ^= bsort_input_copied[i+1];
