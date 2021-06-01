@@ -16,7 +16,6 @@ void run(void)
         {
                 for (i = 0; i < maxindex; i++)
                 {
-					*gDebugLedsMemoryMappedRegister = bsort_input_copied[i];
 					for (int j = 0; j < kSpinDelay * 3; j++);
 					if (bsort_input_copied[i] > bsort_input_copied[i+1])
                         {
@@ -26,7 +25,6 @@ void run(void)
                                 bsort_input_copied[i] ^= bsort_input_copied[i+1];
                         }
                 }
-				*gDebugLedsMemoryMappedRegister = 0xF0;
                 maxindex--;
         }
 }
@@ -57,7 +55,11 @@ int main(void)
                 *gDebugLedsMemoryMappedRegister = 0x00;
 
 				for (int i = 0; i < 20; i++) {
-					*gDebugLedsMemoryMappedRegister = bsort_input_copied[i];
+
+					if (bsort_input_copied[i] > 10) {
+						*gDebugLedsMemoryMappedRegister = 0x03;
+					}
+
 					for (int j = 0; j < kSpinDelay*3; j++);
 				}
         }
