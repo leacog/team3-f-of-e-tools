@@ -62,6 +62,7 @@ int main(void)
 					if (bsort_input_copied[i] < 11) {
 						*gDebugLedsMemoryMappedRegister = 0x02;
 					}
+					*gDebugLedsMemoryMappedRegister = 0xFF & bsort_input_copied[i];
 
 				}
         }
