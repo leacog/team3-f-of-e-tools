@@ -1,16 +1,16 @@
 #Uncomment mod-version to include
-MODS = allDSP_INSMEM
+#MODS = allDSP_INSMEM
 #MODS = allDSP
 #MODS = ALUadder
 #MODS = ALUcomparator
 #MODS = ALUsubtractor
 #MODS = ALUaddsub
-#MODS = CPUadder
+MODS = CPUadder
 #MODS = INSMEM
 #MODS = baseline
 
 DESIGN	= sail
-VERSION = v0
+VERSION = A2pin
 
 sail-nextpnr:
 	cp mods_includes/$(MODS).v sail-core/include/mods_to_use.v
@@ -19,7 +19,7 @@ sail-nextpnr:
 	yosys -q ../../../yscripts/$(DESIGN).ys -l logfiles/yosys_$(MODS)_$(VERSION).log
 	nextpnr-ice40 --up5k --package uwg30 --json $(DESIGN).json --pcf pcf/$(DESIGN).pcf --asc $(DESIGN).asc -l logfiles/nextpnr_$(MODS)_$(VERSION).log
 	icetime -p pcf/$(DESIGN).pcf -P uwg30 -d up5k -t $(DESIGN).asc
-	icepack $(DESIGN).asc bitstreams/$(MODS)_bsort.bin
+	icepack $(DESIGN).asc bitstreams/$(MODS)_$(VERSION).bin
 
 clean:
 	rm -f *.json *.blif *.asc *.bin
