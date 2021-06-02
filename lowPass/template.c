@@ -1,3 +1,4 @@
+#include "sf-types.h"
 #include "lowpass-input.h"
 
 int
