@@ -1,5 +1,5 @@
 $date
-	Sun May 30 23:26:04 2021
+	Wed Jun  2 10:43:48 2021
 $end
 $version
 	Icarus Verilog
@@ -23,7 +23,7 @@ $enddefinitions $end
 #0
 $dumpvars
 bx '
-0&
+1&
 b0 %
 b0 $
 0#
@@ -33,6 +33,9 @@ $end
 #1
 1#
 #2
+0&
+b10011 !
+b10011 '
 0#
 #3
 1#
