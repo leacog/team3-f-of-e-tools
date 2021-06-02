@@ -53,7 +53,7 @@ int main(void)
                 *gDebugLedsMemoryMappedRegister = 0xFF;
                 run();
                 *gDebugLedsMemoryMappedRegister = 0x00;
-				for (int j = 0; j < kSpinDelay*5; j++);
+				for (int j = 0; j < kSpinDelay; j++);
 
 				for (int i = 0; i < 20; i++) {
 					for (int j = 0; j < kSpinDelay*2; j++);
