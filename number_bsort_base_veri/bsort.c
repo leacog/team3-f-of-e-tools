@@ -41,16 +41,16 @@ int main(void)
 				for (int i = 0; i < 20; i++) {
 
 					/* to verify the bubble sort in a simply way */
-					if (bsort_input_copied[i] = 10) {
+					if (bsort_input_copied[i] == 10) {
 						*gDebugLedsMemoryMappedRegister = 0x0A;
 					}
-					if (bsort_input_copied[i] = 11) {
+					if (bsort_input_copied[i] == 11) {
 						*gDebugLedsMemoryMappedRegister = 0x0B;
 					}
-					if (bsort_input_copied[i] = 15) {
+					if (bsort_input_copied[i] == 15) {
 						*gDebugLedsMemoryMappedRegister = 0x0F;
 					}
-					if (bsort_input_copied[i] = 16) {
+					if (bsort_input_copied[i] == 16) {
 						*gDebugLedsMemoryMappedRegister = 0x10;
 					}
 					/* output the sorted numbers (not working correctly)*/
