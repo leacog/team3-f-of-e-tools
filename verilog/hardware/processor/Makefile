@@ -5,12 +5,12 @@
 #MODS = ALUcomparator
 #MODS = ALUsubtractor
 #MODS = ALUaddsub
-MODS = CPUadder
-#MODS = INSMEM
+#MODS = CPUadder
+MODS = INSMEM
 #MODS = baseline
 
 DESIGN	= sail
-VERSION = A2pin
+VERSION = newInsmemTest
 
 sail-nextpnr:
 	cp mods_includes/$(MODS).v sail-core/include/mods_to_use.v

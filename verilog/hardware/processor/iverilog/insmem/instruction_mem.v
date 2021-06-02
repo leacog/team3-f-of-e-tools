@@ -35,58 +35,54 @@
 */
 
 
+
 /*
- *	top.v
- *
- *	Top level entity, linking cpu with data and instruction memory.
+ *	RISC-V instruction memory
  */
 
-module top (input clk, output [7:0] led);
-	wire		clk_proc;
-	wire		data_clk_stall;
+`include "/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/sail-core/include/mods_to_use.v"
+
+`ifdef USE_INSTRUCTION_MEM_BRAM
+
+module instruction_memory_bram(addr, out, clk);
+	input clk;
+	reg new_read; 			//1 if new address in the line, 0 otherwise
+	reg[31:0] addr_buf;
+	input [31:0]		addr;
+	output reg [31:0]		out;
+
+	reg [31:0]		insmem[0:1023];
 	
-	/*
-	 *	Memory interface
-	 */
-	wire[31:0]	inst_in;
-	wire[31:0]	inst_out;
-	wire[31:0]	data_out;
-	wire[31:0]	data_addr;
-	wire[31:0]	data_WrData;
-	wire		data_memwrite;
-	wire		data_memread;
-	wire[3:0]	data_sign_mask;
+	initial begin
+		$readmemh("/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/verilog/program.hex",insmem);
+	end
+	
+	always @(addr) begin
+		new_read = 1'b1;
+		addr_buf <= addr;
+	end
 
-
-	cpu processor(
-		.clk(clk_proc),
-		.inst_mem_in(inst_in),
-		.inst_mem_out(inst_out),
-		.data_mem_out(data_out),
-		.data_mem_addr(data_addr),
-		.data_mem_WrData(data_WrData),
-		.data_mem_memwrite(data_memwrite),
-		.data_mem_memread(data_memread),
-		.data_mem_sign_mask(data_sign_mask)
-	);
-
-	instruction_memory_bram inst_mem( 
-		.addr(inst_in), 
-		.out(inst_out),
-		.clk(clk)
-	);
-
-	data_mem data_mem_inst(
-			.clk(clk),
-			.addr(data_addr),
-			.write_data(data_WrData),
-			.memwrite(data_memwrite), 
-			.memread(data_memread), 
-			.read_data(data_out),
-			.sign_mask(data_sign_mask),
-			.led(led),
-			.clk_stall(data_clk_stall)
-		);
-
-	assign clk_proc = (data_clk_stall) ? 1'b1 : clk;
+	always @(negedge clk) begin
+		if (new_read==1'b1) begin
+			out <= insmem[addr_buf >> 2];
+			new_read <= 1'b0;
+		end
+	end
 endmodule
+
+`else
+
+module instruction_memory(addr, out);
+	input [31:0]		addr;
+	output [31:0]		out;
+
+	reg [31:0]		instruction_memory[0:2**12-1];
+
+	initial begin
+		$readmemh("/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/programs/program.hex",instruction_memory);
+	end
+
+	assign out = instruction_memory[addr >> 2];
+endmodule
+
+`endif

@@ -4,10 +4,9 @@ module top();
 	reg[31:0] addr;
 	wire[31:0] out;
 
-	instruction_memory_bram insmem(
+	instruction_memory insmem(
 		.addr(addr),
-		.out(out),
-		.clk(clk)
+		.out(out)
 	);
 
 

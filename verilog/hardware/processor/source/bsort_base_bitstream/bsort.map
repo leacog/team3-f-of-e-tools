@@ -92,7 +92,7 @@ LOAD /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libgloss.a
 .iplt
  *(.iplt)
 
-.text           0x0000000008004000      0xe00
+.text           0x0000000008004000      0xdf0
  *(.text.unlikely .text.*_unlikely .text.unlikely.*)
  *(.text.exit .text.exit.*)
  *(.text.startup .text.startup.*)
@@ -101,50 +101,50 @@ LOAD /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libgloss.a
  .text          0x0000000008004000       0x1c init-sf.o
                 0x0000000008004000                _start
                 0x0000000008004010                __errno
- .text          0x000000000800401c      0x2f4 bsort.o
+ .text          0x000000000800401c      0x2e4 bsort.o
                 0x000000000800401c                run
                 0x00000000080041cc                blink
-                0x0000000008004244                main
- .text          0x0000000008004310       0x34 /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-exit.o)
-                0x0000000008004310                exit
- .text          0x0000000008004344        0x0 /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-impure.o)
- .text          0x0000000008004344      0x11c /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-memcpy.o)
-                0x0000000008004344                memcpy
- .text          0x0000000008004460      0x11c /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-__call_atexit.o)
-                0x0000000008004460                __call_exitprocs
- .text          0x000000000800457c      0x884 /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libgloss.a(syscalls.o)
-                0x0000000008004620                __syscall_error
-                0x0000000008004650                _open
-                0x0000000008004698                _openat
-                0x00000000080046dc                _lseek
-                0x0000000008004724                _read
-                0x000000000800476c                _write
-                0x00000000080047b4                _fstat
-                0x000000000800481c                _stat
-                0x0000000008004884                _lstat
-                0x00000000080048ec                _fstatat
-                0x000000000800494c                _access
-                0x0000000008004998                _faccessat
-                0x00000000080049dc                _close
-                0x0000000008004a2c                _link
-                0x0000000008004a78                _unlink
-                0x0000000008004ac8                _execve
-                0x0000000008004aec                _fork
-                0x0000000008004b10                _getpid
-                0x0000000008004b18                _kill
-                0x0000000008004b3c                _wait
-                0x0000000008004b60                _isatty
-                0x0000000008004b90                _gettimeofday
-                0x0000000008004be0                _times
-                0x0000000008004c84                _ftime
-                0x0000000008004ca0                _utime
-                0x0000000008004ca8                _chown
-                0x0000000008004cb0                _chmod
-                0x0000000008004cb8                _chdir
-                0x0000000008004cc0                _getcwd
-                0x0000000008004cc8                _sysconf
-                0x0000000008004ce4                _sbrk
-                0x0000000008004dc4                _exit
+                0x000000000800423c                main
+ .text          0x0000000008004300       0x34 /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-exit.o)
+                0x0000000008004300                exit
+ .text          0x0000000008004334        0x0 /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-impure.o)
+ .text          0x0000000008004334      0x11c /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-memcpy.o)
+                0x0000000008004334                memcpy
+ .text          0x0000000008004450      0x11c /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libc.a(lib_a-__call_atexit.o)
+                0x0000000008004450                __call_exitprocs
+ .text          0x000000000800456c      0x884 /data/f-of-e-tools/tools/sunflower/tools/tools-lib/riscv/libgloss.a(syscalls.o)
+                0x0000000008004610                __syscall_error
+                0x0000000008004640                _open
+                0x0000000008004688                _openat
+                0x00000000080046cc                _lseek
+                0x0000000008004714                _read
+                0x000000000800475c                _write
+                0x00000000080047a4                _fstat
+                0x000000000800480c                _stat
+                0x0000000008004874                _lstat
+                0x00000000080048dc                _fstatat
+                0x000000000800493c                _access
+                0x0000000008004988                _faccessat
+                0x00000000080049cc                _close
+                0x0000000008004a1c                _link
+                0x0000000008004a68                _unlink
+                0x0000000008004ab8                _execve
+                0x0000000008004adc                _fork
+                0x0000000008004b00                _getpid
+                0x0000000008004b08                _kill
+                0x0000000008004b2c                _wait
+                0x0000000008004b50                _isatty
+                0x0000000008004b80                _gettimeofday
+                0x0000000008004bd0                _times
+                0x0000000008004c74                _ftime
+                0x0000000008004c90                _utime
+                0x0000000008004c98                _chown
+                0x0000000008004ca0                _chmod
+                0x0000000008004ca8                _chdir
+                0x0000000008004cb0                _getcwd
+                0x0000000008004cb8                _sysconf
+                0x0000000008004cd4                _sbrk
+                0x0000000008004db4                _exit
  *(.gnu.warning)
 
 .fini

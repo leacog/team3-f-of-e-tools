@@ -1,5 +1,5 @@
 module top();
-	reg clk = 0;
+	reg clk = 1;
 
 	reg[31:0] addr;
 	wire[31:0] out;
@@ -25,23 +25,23 @@ initial begin
 
  	addr = 32'b0;
 
- 	#5
+ 	#6
  	
 	addr = 32'h4;
 
-	#5
+	#6
 	addr = 32'h8;
 
-	#5
+	#6
 	addr = 32'hc;
 
-	#5
+	#6
 	addr = 32'h10;
 
-	#5
+	#6
 	addr = 32'h14;
 
-	#5
+	#6
 
  	$finish;
 end
