@@ -1,5 +1,5 @@
 $date
-	Wed Jun  2 11:08:00 2021
+	Wed Jun  2 11:21:54 2021
 $end
 $version
 	Icarus Verilog
@@ -20,15 +20,13 @@ $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
-bx %
+b10011 %
 b0 $
 0#
 b0 "
-bx !
+b10011 !
 $end
 #1
-b10011 !
-b10011 %
 1#
 #2
 0#
