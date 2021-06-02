@@ -1,16 +1,16 @@
 #Uncomment mod-version to include
-#MODS = allDSP_INSMEM
+MODS = allDSP_INSMEM
 #MODS = allDSP
 #MODS = ALUadder
 #MODS = ALUcomparator
 #MODS = ALUsubtractor
 #MODS = ALUaddsub
 #MODS = CPUadder
-MODS = INSMEM
+#MODS = INSMEM
 #MODS = baseline
 
 DESIGN	= sail
-VERSION = newInsmemTest
+VERSION = 03-06_bsort
 
 sail-nextpnr:
 	cp mods_includes/$(MODS).v sail-core/include/mods_to_use.v
