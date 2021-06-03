@@ -41,13 +41,15 @@
  *	Top level entity, linking cpu with data and instruction memory.
  */
 
-`include "sail-core/include/mods_to_use.v"
+`include "/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/sail-core/include/mods_to_use.v"
+`ifdef USE_SUBSETTING
+	`include "/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/sail-core/include/alu-subset-includes.v"
+`else
+	`include "/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/sail-core/include/full-isa-includes.v"
+`endif
 
 module top (led);
 	output [7:0]	led;
-
-	wire		clk_proc;
-	wire		data_clk_stall;
 	
 	wire		clk;
 	reg		ENCLKHF		= 1'b1;	// Plock enable
@@ -76,17 +78,33 @@ module top (led);
 	wire[3:0]	data_sign_mask;
 
 
-	cpu processor(
-		.clk(clk),
-		.inst_mem_in(inst_in),
-		.inst_mem_out(inst_out),
-		.data_mem_out(data_out),
-		.data_mem_addr(data_addr),
-		.data_mem_WrData(data_WrData),
-		.data_mem_memwrite(data_memwrite),
-		.data_mem_memread(data_memread),
-		.data_mem_sign_mask(data_sign_mask)
-	);
+	`ifdef USE_ONE_CYCLE_DATA_MEM
+		cpu processor(
+			.clk(clk),
+			.inst_mem_in(inst_in),
+			.inst_mem_out(inst_out),
+			.data_mem_out(data_out),
+			.data_mem_addr(data_addr),
+			.data_mem_WrData(data_WrData),
+			.data_mem_memwrite(data_memwrite),
+			.data_mem_memread(data_memread),
+			.data_mem_sign_mask(data_sign_mask)
+		);
+	`else
+		wire		clk_proc;
+		wire		data_clk_stall; 
+		cpu processor(
+				.clk(clk_proc),
+				.inst_mem_in(inst_in),
+				.inst_mem_out(inst_out),
+				.data_mem_out(data_out),
+				.data_mem_addr(data_addr),
+				.data_mem_WrData(data_WrData),
+				.data_mem_memwrite(data_memwrite),
+				.data_mem_memread(data_memread),
+				.data_mem_sign_mask(data_sign_mask)
+			);
+	`endif
 
 	`ifdef USE_INSTRUCTION_MEM_BRAM  //Doesn't seem to like nesting inputs and outputs in ifdef statements
 		instruction_memory_bram inst_mem( 
@@ -100,18 +118,31 @@ module top (led);
 			.out(inst_out),
 		);
 	`endif
+	
+	`ifdef USE_ONE_CYCLE_DATA_MEM
+		data_mem data_mem_inst(
+				.clk(clk),
+				.addr(data_addr),
+				.write_data(data_WrData),
+				.memwrite(data_memwrite), 
+				.memread(data_memread), 
+				.read_data(data_out),
+				.sign_mask(data_sign_mask),
+				.led(led),
+			);
+	`else
+		data_mem data_mem_inst(
+				.clk(clk),
+				.addr(data_addr),
+				.write_data(data_WrData),
+				.memwrite(data_memwrite), 
+				.memread(data_memread), 
+				.read_data(data_out),
+				.sign_mask(data_sign_mask),
+				.led(led),
+				.clk_stall(data_clk_stall)
+			);
+			assign clk_proc = (data_clk_stall) ? 1'b1 : clk;
+	`endif
 
-	data_mem data_mem_inst(
-			.clk(clk),
-			.addr(data_addr),
-			.write_data(data_WrData),
-			.memwrite(data_memwrite), 
-			.memread(data_memread), 
-			.read_data(data_out),
-			.sign_mask(data_sign_mask),
-			.led(led),
-			.clk_stall(data_clk_stall)
-		);
-
-	assign clk_proc = (data_clk_stall) ? 1'b1 : clk;
 endmodule

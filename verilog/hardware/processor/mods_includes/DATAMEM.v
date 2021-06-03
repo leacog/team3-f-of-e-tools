@@ -1,0 +1,1 @@
+`define USE_ONE_CYCLE_DATA_MEM 1'b1
