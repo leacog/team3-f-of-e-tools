@@ -1,22 +1,22 @@
 #Uncomment mod-version to include
-MODS = allDSP_INSMEM
+#MODS = allDSP_INSMEM
 #MODS = allDSP
 #MODS = ALUadder
 #MODS = ALUcomparator
 #MODS = ALUsubtractor
 #MODS = ALUaddsub
 #MODS = CPUadder
-#MODS = INSMEM
+MODS = INSMEM
 #MODS = baseline
 
-USE_SUBSET = _s.v
-#USE_SUBSET = .v
+#USE_SUBSET = _s
+USE_SUBSET = 
 
 DESIGN	= sail
-VERSION = 03-06_bsort
+VERSION = toggle_test
 
 sail-nextpnr:
-	cp mods_includes/$(MODS)$(USE_SUBSET) sail-core/include/mods_to_use.v
+	cp mods_includes/$(MODS)$(USE_SUBSET).v sail-core/include/mods_to_use.v
 	cp programs/data.hex verilog/
 	cp programs/program.hex verilog/
 	yosys -q ../../../yscripts/$(DESIGN).ys -l logfiles/yosys_$(MODS)_$(VERSION)$(USE_SUBSET).log
