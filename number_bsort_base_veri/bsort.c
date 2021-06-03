@@ -30,7 +30,7 @@ main(void)
 		for (int j = 0; j < kSpinDelay; j++);
 
 		for (int j = 1; j < 0x100; j=j*2) {
-			if (bsort_input[maxindex] & j) { *gDebugLedsMemoryMappedRegister = 0xFF };
+			if (bsort_input[maxindex] & j) { *gDebugLedsMemoryMappedRegister = 0xFF; };
 			for (int j = 0; j < kSpinDelay; j++);
 			*gDebugLedsMemoryMappedRegister = 0x00;
 		}
