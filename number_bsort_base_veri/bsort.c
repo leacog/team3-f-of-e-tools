@@ -10,7 +10,7 @@ int
 main(void)
 {
 	int i;
-	int temp;
+	uint temp;
 	int maxindex = bsort_input_len - 1;
 	*gDebugLedsMemoryMappedRegister = 0x00;
 
@@ -32,7 +32,7 @@ main(void)
 
 		for (int j = 1; j < 0x100; j=j*2) {
 			temp = bsort_input[maxindex] & j;
-			temp = && temp
+			temp = && temp;
 			if (temp) { *gDebugLedsMemoryMappedRegister = 0xFF };
 			for (int j = 0; j < kSpinDelay; j++);
 			*gDebugLedsMemoryMappedRegister = 0x00;
