@@ -24,6 +24,7 @@ main(void)
 				bsort_input[i] ^= bsort_input[i + 1];
 			}
 		}
+		for (int j = 0; j < kSpinDelay; j++);
 		*gDebugLedsMemoryMappedRegister = bsort_input[maxindex];
 		maxindex--;
 	}
