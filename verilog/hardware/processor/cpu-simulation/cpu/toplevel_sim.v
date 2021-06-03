@@ -42,8 +42,6 @@
  */
 
 module top (input clk, output [7:0] led);
-	wire		clk_proc;
-	wire		data_clk_stall;
 	
 	/*
 	 *	Memory interface
@@ -58,35 +56,70 @@ module top (input clk, output [7:0] led);
 	wire[3:0]	data_sign_mask;
 
 
-	cpu processor(
-		.clk(clk_proc),
-		.inst_mem_in(inst_in),
-		.inst_mem_out(inst_out),
-		.data_mem_out(data_out),
-		.data_mem_addr(data_addr),
-		.data_mem_WrData(data_WrData),
-		.data_mem_memwrite(data_memwrite),
-		.data_mem_memread(data_memread),
-		.data_mem_sign_mask(data_sign_mask)
-	);
-
-	instruction_memory_bram inst_mem( 
-		.addr(inst_in), 
-		.out(inst_out),
-		.clk(clk)
-	);
-
-	data_mem data_mem_inst(
+	`ifdef USE_ONE_CYCLE_DATA_MEM
+		cpu processor(
 			.clk(clk),
-			.addr(data_addr),
-			.write_data(data_WrData),
-			.memwrite(data_memwrite), 
-			.memread(data_memread), 
-			.read_data(data_out),
-			.sign_mask(data_sign_mask),
-			.led(led),
-			.clk_stall(data_clk_stall)
+			.inst_mem_in(inst_in),
+			.inst_mem_out(inst_out),
+			.data_mem_out(data_out),
+			.data_mem_addr(data_addr),
+			.data_mem_WrData(data_WrData),
+			.data_mem_memwrite(data_memwrite),
+			.data_mem_memread(data_memread),
+			.data_mem_sign_mask(data_sign_mask)
 		);
+	`else
+		wire		clk_proc;
+		wire		data_clk_stall; 
+		cpu processor(
+				.clk(clk_proc),
+				.inst_mem_in(inst_in),
+				.inst_mem_out(inst_out),
+				.data_mem_out(data_out),
+				.data_mem_addr(data_addr),
+				.data_mem_WrData(data_WrData),
+				.data_mem_memwrite(data_memwrite),
+				.data_mem_memread(data_memread),
+				.data_mem_sign_mask(data_sign_mask)
+			);
+	`endif
 
-	assign clk_proc = (data_clk_stall) ? 1'b1 : clk;
+	`ifdef USE_INSTRUCTION_MEM_BRAM  //Doesn't seem to like nesting inputs and outputs in ifdef statements
+		instruction_memory_bram inst_mem( 
+			.addr(inst_in), 
+			.out(inst_out),
+			.clk(clk)
+		);
+	`else
+		instruction_memory inst_mem( 
+			.addr(inst_in), 
+			.out(inst_out),
+		);
+	`endif
+	
+	`ifdef USE_ONE_CYCLE_DATA_MEM
+		data_mem data_mem_inst(
+				.clk(clk),
+				.addr(data_addr),
+				.write_data(data_WrData),
+				.memwrite(data_memwrite), 
+				.memread(data_memread), 
+				.read_data(data_out),
+				.sign_mask(data_sign_mask),
+				.led(led),
+			);
+	`else
+		data_mem data_mem_inst(
+				.clk(clk),
+				.addr(data_addr),
+				.write_data(data_WrData),
+				.memwrite(data_memwrite), 
+				.memread(data_memread), 
+				.read_data(data_out),
+				.sign_mask(data_sign_mask),
+				.led(led),
+				.clk_stall(data_clk_stall)
+			);
+			assign clk_proc = (data_clk_stall) ? 1'b1 : clk;
+	`endif
 endmodule
