@@ -4,6 +4,27 @@
 #include "softwareblink.h"
 
 
+void sendSerial(uchar inputByte)
+{
+	*gDebugLedsMemoryMappedRegister = 0xFF;
+	for (int j = 0; j < kSpinDelay*4; j++);
+	*gDebugLedsMemoryMappedRegister = 0x00;
+	for (int j = 0; j < kSpinDelay*4; j++);
+
+	uchar bits = inputByte;
+	for(int i = 0; i < 8; i++) {
+		if(bits & 0x01) {
+			*gDebugLedsMemoryMappedRegister = 0xFF;
+		} else {
+			*gDebugLedsMemoryMappedRegister = 0x00;
+		}
+		bits = (bits >> 1);
+		for (int j = 0; j < kSpinDelay; j++);
+ 	}
+
+	*gDebugLedsMemoryMappedRegister = 0x00;
+
+}
 
 
 int
@@ -26,7 +47,7 @@ main(void)
 				bsort_input[i] ^= bsort_input[i + 1];
 			}
 		}
-		*gDebugLedsMemoryMappedRegister = bsort_input[maxindex];
+		sendSerial(bsort_input[maxindex]);
 		maxindex--;
 		for (int j = 0; j < kSpinDelay; j++);
 	}
