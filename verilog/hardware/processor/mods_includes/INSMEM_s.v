@@ -1,0 +1,2 @@
+`define USE_SUBSETTING 1'b1
+`define USE_INSTRUCTION_MEM_BRAM 1'b1
