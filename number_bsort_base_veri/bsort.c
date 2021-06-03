@@ -11,7 +11,9 @@ main(void)
 {
 	int i;
 	int maxindex = bsort_input_len - 1;
-
+	*gDebugLedsMemoryMappedRegister = 0xFF;
+	for (int j = 0; j < kSpinDelay*3; j++);
+	*gDebugLedsMemoryMappedRegister = 0x00;
 	while (maxindex > 0)
 	{
 		for (i = 0; i < maxindex; i++)
@@ -26,6 +28,7 @@ main(void)
 		}
 		*gDebugLedsMemoryMappedRegister = bsort_input[maxindex];
 		maxindex--;
+		for (int j = 0; j < kSpinDelay; j++);
 	}
 	
 
