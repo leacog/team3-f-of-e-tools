@@ -2,26 +2,169 @@
 `define SB_DFF_REG reg Q = 0
 // `define SB_DFF_REG reg Q
 
-`ifndef NO_ICE40_DEFAULT_ASSIGNMENTS
-`define ICE40_DEFAULT_ASSIGNMENT_V(v) = v
-`define ICE40_DEFAULT_ASSIGNMENT_0 = 1'b0
-`define ICE40_DEFAULT_ASSIGNMENT_1 = 1'b1
-`else
-`define ICE40_DEFAULT_ASSIGNMENT_V(v)
-`define ICE40_DEFAULT_ASSIGNMENT_0
-`define ICE40_DEFAULT_ASSIGNMENT_1
+// SiliconBlue IO Cells
+
+module SB_IO (
+	inout  PACKAGE_PIN,
+	input  LATCH_INPUT_VALUE,
+	input  CLOCK_ENABLE,
+	input  INPUT_CLK,
+	input  OUTPUT_CLK,
+	input  OUTPUT_ENABLE,
+	input  D_OUT_0,
+	input  D_OUT_1,
+	output D_IN_0,
+	output D_IN_1
+);
+	parameter [5:0] PIN_TYPE = 6'b000000;
+	parameter [0:0] PULLUP = 1'b0;
+	parameter [0:0] NEG_TRIGGER = 1'b0;
+	parameter IO_STANDARD = "SB_LVCMOS";
+
+`ifndef BLACKBOX
+	reg dout, din_0, din_1;
+	reg din_q_0, din_q_1;
+	reg dout_q_0, dout_q_1;
+	reg outena_q;
+
+	// IO tile generates a constant 1'b1 internally if global_cen is not connected
+	wire clken_pulled = CLOCK_ENABLE || CLOCK_ENABLE === 1'bz;
+	reg  clken_pulled_ri;
+	reg  clken_pulled_ro;
+
+	generate if (!NEG_TRIGGER) begin
+		always @(posedge INPUT_CLK)                       clken_pulled_ri <= clken_pulled;
+		always @(posedge INPUT_CLK)  if (clken_pulled)    din_q_0         <= PACKAGE_PIN;
+		always @(negedge INPUT_CLK)  if (clken_pulled_ri) din_q_1         <= PACKAGE_PIN;
+		always @(posedge OUTPUT_CLK)                      clken_pulled_ro <= clken_pulled;
+		always @(posedge OUTPUT_CLK) if (clken_pulled)    dout_q_0        <= D_OUT_0;
+		always @(negedge OUTPUT_CLK) if (clken_pulled_ro) dout_q_1        <= D_OUT_1;
+		always @(posedge OUTPUT_CLK) if (clken_pulled)    outena_q        <= OUTPUT_ENABLE;
+	end else begin
+		always @(negedge INPUT_CLK)                       clken_pulled_ri <= clken_pulled;
+		always @(negedge INPUT_CLK)  if (clken_pulled)    din_q_0         <= PACKAGE_PIN;
+		always @(posedge INPUT_CLK)  if (clken_pulled_ri) din_q_1         <= PACKAGE_PIN;
+		always @(negedge OUTPUT_CLK)                      clken_pulled_ro <= clken_pulled;
+		always @(negedge OUTPUT_CLK) if (clken_pulled)    dout_q_0        <= D_OUT_0;
+		always @(posedge OUTPUT_CLK) if (clken_pulled_ro) dout_q_1        <= D_OUT_1;
+		always @(negedge OUTPUT_CLK) if (clken_pulled)    outena_q        <= OUTPUT_ENABLE;
+	end endgenerate
+
+	always @* begin
+		if (!PIN_TYPE[1] || !LATCH_INPUT_VALUE)
+			din_0 = PIN_TYPE[0] ? PACKAGE_PIN : din_q_0;
+		din_1 = din_q_1;
+	end
+
+	// work around simulation glitches on dout in DDR mode
+	reg outclk_delayed_1;
+	reg outclk_delayed_2;
+	always @* outclk_delayed_1 <= OUTPUT_CLK;
+	always @* outclk_delayed_2 <= outclk_delayed_1;
+
+	always @* begin
+		if (PIN_TYPE[3])
+			dout = PIN_TYPE[2] ? !dout_q_0 : D_OUT_0;
+		else
+			dout = (outclk_delayed_2 ^ NEG_TRIGGER) || PIN_TYPE[2] ? dout_q_0 : dout_q_1;
+	end
+
+	assign D_IN_0 = din_0, D_IN_1 = din_1;
+
+	generate
+		if (PIN_TYPE[5:4] == 2'b01) assign PACKAGE_PIN = dout;
+		if (PIN_TYPE[5:4] == 2'b10) assign PACKAGE_PIN = OUTPUT_ENABLE ? dout : 1'bz;
+		if (PIN_TYPE[5:4] == 2'b11) assign PACKAGE_PIN = outena_q ? dout : 1'bz;
+	endgenerate
 `endif
+`ifdef TIMING
+specify
+	(INPUT_CLK => D_IN_0) = (0:0:0, 0:0:0);
+	(INPUT_CLK => D_IN_1) = (0:0:0, 0:0:0);
+	(PACKAGE_PIN => D_IN_0) = (0:0:0, 0:0:0);
+	(OUTPUT_CLK => PACKAGE_PIN) = (0:0:0, 0:0:0);
+	(D_OUT_0 => PACKAGE_PIN) = (0:0:0, 0:0:0);
+	(OUTPUT_ENABLE => PACKAGE_PIN) = (0:0:0, 0:0:0);
+
+	$setuphold(posedge OUTPUT_CLK, posedge D_OUT_0, 0:0:0, 0:0:0);
+	$setuphold(posedge OUTPUT_CLK, negedge D_OUT_0, 0:0:0, 0:0:0);
+	$setuphold(negedge OUTPUT_CLK, posedge D_OUT_1, 0:0:0, 0:0:0);
+	$setuphold(negedge OUTPUT_CLK, negedge D_OUT_1, 0:0:0, 0:0:0);
+	$setuphold(negedge OUTPUT_CLK, posedge D_OUT_0, 0:0:0, 0:0:0);
+	$setuphold(negedge OUTPUT_CLK, negedge D_OUT_0, 0:0:0, 0:0:0);
+	$setuphold(posedge OUTPUT_CLK, posedge D_OUT_1, 0:0:0, 0:0:0);
+	$setuphold(posedge OUTPUT_CLK, negedge D_OUT_1, 0:0:0, 0:0:0);
+	$setuphold(posedge INPUT_CLK, posedge CLOCK_ENABLE, 0:0:0, 0:0:0);
+	$setuphold(posedge INPUT_CLK, negedge CLOCK_ENABLE, 0:0:0, 0:0:0);
+	$setuphold(posedge OUTPUT_CLK, posedge CLOCK_ENABLE, 0:0:0, 0:0:0);
+	$setuphold(posedge OUTPUT_CLK, negedge CLOCK_ENABLE, 0:0:0, 0:0:0);
+	$setuphold(posedge INPUT_CLK, posedge PACKAGE_PIN, 0:0:0, 0:0:0);
+	$setuphold(posedge INPUT_CLK, negedge PACKAGE_PIN, 0:0:0, 0:0:0);
+	$setuphold(negedge INPUT_CLK, posedge PACKAGE_PIN, 0:0:0, 0:0:0);
+	$setuphold(negedge INPUT_CLK, negedge PACKAGE_PIN, 0:0:0, 0:0:0);
+	$setuphold(posedge OUTPUT_CLK, posedge OUTPUT_ENABLE, 0:0:0, 0:0:0);
+	$setuphold(posedge OUTPUT_CLK, negedge OUTPUT_ENABLE, 0:0:0, 0:0:0);
+	$setuphold(negedge OUTPUT_CLK, posedge OUTPUT_ENABLE, 0:0:0, 0:0:0);
+	$setuphold(negedge OUTPUT_CLK, negedge OUTPUT_ENABLE, 0:0:0, 0:0:0);
+endspecify
+`endif
+endmodule
+
+module SB_GB_IO (
+	inout  PACKAGE_PIN,
+	output GLOBAL_BUFFER_OUTPUT,
+	input  LATCH_INPUT_VALUE,
+	input  CLOCK_ENABLE,
+	input  INPUT_CLK,
+	input  OUTPUT_CLK,
+	input  OUTPUT_ENABLE,
+	input  D_OUT_0,
+	input  D_OUT_1,
+	output D_IN_0,
+	output D_IN_1
+);
+	parameter [5:0] PIN_TYPE = 6'b000000;
+	parameter [0:0] PULLUP = 1'b0;
+	parameter [0:0] NEG_TRIGGER = 1'b0;
+	parameter IO_STANDARD = "SB_LVCMOS";
+
+	assign GLOBAL_BUFFER_OUTPUT = PACKAGE_PIN;
+
+	SB_IO #(
+		.PIN_TYPE(PIN_TYPE),
+		.PULLUP(PULLUP),
+		.NEG_TRIGGER(NEG_TRIGGER),
+		.IO_STANDARD(IO_STANDARD)
+	) IO (
+		.PACKAGE_PIN(PACKAGE_PIN),
+		.LATCH_INPUT_VALUE(LATCH_INPUT_VALUE),
+		.CLOCK_ENABLE(CLOCK_ENABLE),
+		.INPUT_CLK(INPUT_CLK),
+		.OUTPUT_CLK(OUTPUT_CLK),
+		.OUTPUT_ENABLE(OUTPUT_ENABLE),
+		.D_OUT_0(D_OUT_0),
+		.D_OUT_1(D_OUT_1),
+		.D_IN_0(D_IN_0),
+		.D_IN_1(D_IN_1)
+	);
+endmodule
+
+module SB_GB (
+	input  USER_SIGNAL_TO_GLOBAL_BUFFER,
+	output GLOBAL_BUFFER_OUTPUT
+);
+	assign GLOBAL_BUFFER_OUTPUT = USER_SIGNAL_TO_GLOBAL_BUFFER;
+`ifdef TIMING
+specify
+	(USER_SIGNAL_TO_GLOBAL_BUFFER => GLOBAL_BUFFER_OUTPUT) = (0:0:0, 0:0:0);
+endspecify
+`endif
+endmodule
 
 // SiliconBlue Logic Cells
 
 (* abc9_lut=1, lib_whitebox *)
-module SB_LUT4 (
-	output O,
-	input I0 `ICE40_DEFAULT_ASSIGNMENT_0,
-	input I1 `ICE40_DEFAULT_ASSIGNMENT_0,
-	input I2 `ICE40_DEFAULT_ASSIGNMENT_0,
-	input I3 `ICE40_DEFAULT_ASSIGNMENT_0
-);
+module SB_LUT4 (output O, input I0, I1, I2, I3);
 	parameter [15:0] LUT_INIT = 0;
 	wire [7:0] s3 = I3 ? LUT_INIT[15:8] : LUT_INIT[7:0];
 	wire [3:0] s2 = I2 ?       s3[ 7:4] :       s3[3:0];
@@ -102,7 +245,6 @@ endmodule
 
 // Positive Edge SiliconBlue FF Cells
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFF (
 	output `SB_DFF_REG,
 	input C, D
@@ -138,10 +280,9 @@ module SB_DFF (
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFE (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, D
+	input C, E, D
 );
 	always @(posedge C)
 		if (E)
@@ -181,7 +322,6 @@ module SB_DFFE (
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFSR (
 	output `SB_DFF_REG,
 	input C, R, D
@@ -229,7 +369,6 @@ module SB_DFFSR (
 `endif
 endmodule
 
-(* abc9_box, lib_whitebox *)
 module SB_DFFR (
 	output `SB_DFF_REG,
 	input C, R, D
@@ -247,13 +386,7 @@ module SB_DFFR (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(negedge R, posedge C, 160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 599;
-`else
-		if (R) (R => Q) = 599;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (!R) (posedge C => (Q : D)) = 540;
 	endspecify
@@ -266,13 +399,7 @@ module SB_DFFR (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(negedge R, posedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 883;
-`else
-		if (R) (R => Q) = 883;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (!R) (posedge C => (Q : D)) = 796;
 	endspecify
@@ -285,20 +412,13 @@ module SB_DFFR (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(negedge R, posedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 1589;
-`else
-		if (R) (R => Q) = 1589;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (!R) (posedge C => (Q : D)) = 1391;
 	endspecify
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFSS (
 	output `SB_DFF_REG,
 	input C, S, D
@@ -346,7 +466,6 @@ module SB_DFFSS (
 `endif
 endmodule
 
-(* abc9_box, lib_whitebox *)
 module SB_DFFS (
 	output `SB_DFF_REG,
 	input C, S, D
@@ -364,13 +483,7 @@ module SB_DFFS (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(negedge S, posedge C, 160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 599;
-`else
-		if (S) (S => Q) = 599;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (!S) (posedge C => (Q : D)) = 540;
 	endspecify
@@ -383,13 +496,7 @@ module SB_DFFS (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(negedge S, posedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 883;
-`else
-		if (S) (S => Q) = 883;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (!S) (posedge C => (Q : D)) = 796;
 	endspecify
@@ -402,23 +509,16 @@ module SB_DFFS (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(negedge S, posedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 1589;
-`else
-		if (S) (S => Q) = 1589; // Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (!S) (posedge C => (Q : D)) = 1391;
 	endspecify
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFESR (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, R, D
+	input C, E, R, D
 );
 	always @(posedge C)
 		if (E) begin
@@ -471,10 +571,9 @@ module SB_DFFESR (
 `endif
 endmodule
 
-(* abc9_box, lib_whitebox *)
 module SB_DFFER (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, R, D
+	input C, E, R, D
 );
 	always @(posedge C, posedge R)
 		if (R)
@@ -491,13 +590,7 @@ module SB_DFFER (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(negedge R, posedge C, 160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 599;
-`else
-		if (R) (R => Q) = 599;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (E && !R) (posedge C => (Q : D)) = 540;
 	endspecify
@@ -512,13 +605,7 @@ module SB_DFFER (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(negedge R, posedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 883;
-`else
-		if (R) (R => Q) = 883; 	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (E && !R) (posedge C => (Q : D)) = 796;
 	endspecify
@@ -533,23 +620,16 @@ module SB_DFFER (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(negedge R, posedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 1589;
-`else
-		if (R) (R => Q) = 1589;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (E && !R) (posedge C => (Q : D)) = 1391;
 	endspecify
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFESS (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, S, D
+	input C, E, S, D
 );
 	always @(posedge C)
 		if (E) begin
@@ -602,10 +682,9 @@ module SB_DFFESS (
 `endif
 endmodule
 
-(* abc9_box, lib_whitebox *)
 module SB_DFFES (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, S, D
+	input C, E, S, D
 );
 	always @(posedge C, posedge S)
 		if (S)
@@ -622,13 +701,7 @@ module SB_DFFES (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(posedge S, posedge C, 160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 599;
-`else
-		if (S) (S => Q) = 599;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (E && !S) (posedge C => (Q : D)) = 540;
 	endspecify
@@ -643,13 +716,7 @@ module SB_DFFES (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(posedge S, posedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 883;
-`else
-		if (S) (S => Q) = 883; // Technically, this should be an edge sensitive path
-							   // but for facilitating a bypass box, let's pretend it's
-							   // a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (E && !S) (posedge C => (Q : D)) = 796;
 	endspecify
@@ -664,13 +731,7 @@ module SB_DFFES (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(posedge S, posedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 1589;
-`else
-		if (S) (S => Q) = 1589; // Technically, this should be an edge sensitive path
-							   // but for facilitating a bypass box, let's pretend it's
-							   // a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (E && !S) (posedge C => (Q : D)) = 1391;
 	endspecify
@@ -679,7 +740,6 @@ endmodule
 
 // Negative Edge SiliconBlue FF Cells
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFN (
 	output `SB_DFF_REG,
 	input C, D
@@ -715,10 +775,9 @@ module SB_DFFN (
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFNE (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, D
+	input C, E, D
 );
 	always @(negedge C)
 		if (E)
@@ -758,7 +817,6 @@ module SB_DFFNE (
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFNSR (
 	output `SB_DFF_REG,
 	input C, R, D
@@ -806,7 +864,6 @@ module SB_DFFNSR (
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFNR (
 	output `SB_DFF_REG,
 	input C, R, D
@@ -824,13 +881,7 @@ module SB_DFFNR (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(negedge R, negedge C, 160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 599;
-`else
-		if (R) (R => Q) = 599;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (!R) (negedge C => (Q : D)) = 540;
 	endspecify
@@ -843,13 +894,7 @@ module SB_DFFNR (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(negedge R, negedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 883;
-`else
-		if (R) (R => Q) = 883;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (!R) (negedge C => (Q : D)) = 796;
 	endspecify
@@ -862,20 +907,13 @@ module SB_DFFNR (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(negedge R, negedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 1589;
-`else
-		if (R) (R => Q) = 1589;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (!R) (negedge C => (Q : D)) = 1391;
 	endspecify
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFNSS (
 	output `SB_DFF_REG,
 	input C, S, D
@@ -923,7 +961,6 @@ module SB_DFFNSS (
 `endif
 endmodule
 
-(* abc9_box, lib_whitebox *)
 module SB_DFFNS (
 	output `SB_DFF_REG,
 	input C, S, D
@@ -941,13 +978,7 @@ module SB_DFFNS (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(negedge S, negedge C, 160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 599;
-`else
-		if (S) (S => Q) = 599;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (!S) (negedge C => (Q : D)) = 540;
 	endspecify
@@ -960,13 +991,7 @@ module SB_DFFNS (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(negedge S, negedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 883;
-`else
-		if (S) (S => Q) = 883;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (!S) (negedge C => (Q : D)) = 796;
 	endspecify
@@ -979,23 +1004,16 @@ module SB_DFFNS (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(negedge S, negedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 1589;
-`else
-		if (S) (S => Q) = 1589;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (!S) (negedge C => (Q : D)) = 1391;
 	endspecify
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFNESR (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, R, D
+	input C, E, R, D
 );
 	always @(negedge C)
 		if (E) begin
@@ -1048,10 +1066,9 @@ module SB_DFFNESR (
 `endif
 endmodule
 
-(* abc9_box, lib_whitebox *)
 module SB_DFFNER (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, R, D
+	input C, E, R, D
 );
 	always @(negedge C, posedge R)
 		if (R)
@@ -1068,13 +1085,7 @@ module SB_DFFNER (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(R, negedge C, 2160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 599;
-`else
-		if (R) (R => Q) = 599;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (E && !R) (negedge C => (Q : D)) = 540;
 	endspecify
@@ -1089,13 +1100,7 @@ module SB_DFFNER (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(R, negedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 883;
-`else
-		if (R) (R => Q) = 883;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (E && !R) (negedge C => (Q : D)) = 796;
 	endspecify
@@ -1110,23 +1115,16 @@ module SB_DFFNER (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(negedge R, negedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge R => (Q : 1'b0)) = 1589;
-`else
-		if (R) (R => Q) = 1589;	// Technically, this should be an edge sensitive path
-					// but for facilitating a bypass box, let's pretend it's
-					// a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (E && !R) (negedge C => (Q : D)) = 1391;
 	endspecify
 `endif
 endmodule
 
-(* abc9_flop, lib_whitebox *)
 module SB_DFFNESS (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, S, D
+	input C, E, S, D
 );
 	always @(negedge C)
 		if (E) begin
@@ -1179,10 +1177,9 @@ module SB_DFFNESS (
 `endif
 endmodule
 
-(* abc9_box, lib_whitebox *)
 module SB_DFFNES (
 	output `SB_DFF_REG,
-	input C, E `ICE40_DEFAULT_ASSIGNMENT_1, S, D
+	input C, E, S, D
 );
 	always @(negedge C, posedge S)
 		if (S)
@@ -1199,14 +1196,7 @@ module SB_DFFNES (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L63
 		$setup(negedge S, negedge C, 160);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 599;
-`else
-        if (S) (S => Q) = 599; // Technically, this should be an edge sensitive path
-                               // but for facilitating a bypass box, let's pretend it's
-                               // a simple path
-`endif
-
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L90
 		if (E && !S) (negedge C => (Q : D)) = 540;
 	endspecify
@@ -1221,13 +1211,7 @@ module SB_DFFNES (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L63
 		$setup(negedge S, negedge C, 235);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L91
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 883;
-`else
-        if (S) (S => Q) = 883; // Technically, this should be an edge sensitive path
-                               // but for facilitating a bypass box, let's pretend it's
-                               // a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L90
 		if (E && !S) (negedge C => (Q : D)) = 796;
 	endspecify
@@ -1242,13 +1226,7 @@ module SB_DFFNES (
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L75
 		$setup(negedge S, negedge C, 424);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L103
-`ifndef YOSYS
 		(posedge S => (Q : 1'b1)) = 1589;
-`else
-        if (S) (S => Q) = 1589; // Technically, this should be an edge sensitive path
-                               // but for facilitating a bypass box, let's pretend it's
-                               // a simple path
-`endif
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L102
 		if (E && !S) (negedge C => (Q : D)) = 1391;
 	endspecify
@@ -1259,16 +1237,11 @@ endmodule
 
 module SB_RAM40_4K (
 	output [15:0] RDATA,
-	input         RCLK,
-	input         RCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         RE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         RCLK, RCLKE, RE,
 	input  [10:0] RADDR,
-	input         WCLK,
-	input         WCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         WE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         WCLK, WCLKE, WE,
 	input  [10:0] WADDR,
-	input  [15:0] MASK `ICE40_DEFAULT_ASSIGNMENT_V(16'h 0000),
-	input  [15:0] WDATA
+	input  [15:0] MASK, WDATA
 );
 	// MODE 0:  256 x 16
 	// MODE 1:  512 x 8
@@ -1498,16 +1471,11 @@ endmodule
 
 module SB_RAM40_4KNR (
 	output [15:0] RDATA,
-	input         RCLKN,
-	input         RCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         RE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         RCLKN, RCLKE, RE,
 	input  [10:0] RADDR,
-	input         WCLK,
-	input         WCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         WE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         WCLK, WCLKE, WE,
 	input  [10:0] WADDR,
-	input  [15:0] MASK `ICE40_DEFAULT_ASSIGNMENT_V(16'h 0000),
-	input  [15:0] WDATA
+	input  [15:0] MASK, WDATA
 );
 	parameter WRITE_MODE = 0;
 	parameter READ_MODE = 0;
@@ -1634,16 +1602,11 @@ endmodule
 
 module SB_RAM40_4KNW (
 	output [15:0] RDATA,
-	input         RCLK,
-	input         RCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         RE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         RCLK, RCLKE, RE,
 	input  [10:0] RADDR,
-	input         WCLKN,
-	input         WCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         WE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         WCLKN, WCLKE, WE,
 	input  [10:0] WADDR,
-	input  [15:0] MASK `ICE40_DEFAULT_ASSIGNMENT_V(16'h 0000),
-	input  [15:0] WDATA
+	input  [15:0] MASK, WDATA
 );
 	parameter WRITE_MODE = 0;
 	parameter READ_MODE = 0;
@@ -1770,16 +1733,11 @@ endmodule
 
 module SB_RAM40_4KNRNW (
 	output [15:0] RDATA,
-	input         RCLKN,
-	input         RCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         RE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         RCLKN, RCLKE, RE,
 	input  [10:0] RADDR,
-	input         WCLKN,
-	input         WCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         WE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         WCLKN, WCLKE, WE,
 	input  [10:0] WADDR,
-	input  [15:0] MASK `ICE40_DEFAULT_ASSIGNMENT_V(16'h 0000),
-	input  [15:0] WDATA
+	input  [15:0] MASK, WDATA
 );
 	parameter WRITE_MODE = 0;
 	parameter READ_MODE = 0;
@@ -1950,7 +1908,7 @@ module ICESTORM_LC (
 			o_reg <= SR_pd ? SET_NORESET : lut_o;
 
 	reg o_reg_async = 1'b0;
-	always @(posedge polarized_clk, posedge SR_pd)
+	always @(posedge polarized_clk, posedge SR)
 		if (SR_pd)
 			o_reg_async <= SET_NORESET;
 		else if (CEN_pu)
@@ -2385,7 +2343,7 @@ module SB_SPRAM256KA (
 
 	always @(negedge POWEROFF) begin
 		for (i = 0; i <= 16383; i = i+1)
-			mem[i] = 16'bx;
+			mem[i] = 'bx;
 	end
 
 	always @(posedge CLOCK, posedge off) begin
@@ -2393,17 +2351,17 @@ module SB_SPRAM256KA (
 			DATAOUT <= 0;
 		end else
 		if (STANDBY) begin
-			DATAOUT <= 16'bx;
+			DATAOUT <= 'bx;
 		end else
 		if (CHIPSELECT) begin
 			if (!WREN) begin
 				DATAOUT <= mem[ADDRESS];
 			end else begin
-				if (MASKWREN[0]) mem[ADDRESS][ 3: 0] <= DATAIN[ 3: 0];
-				if (MASKWREN[1]) mem[ADDRESS][ 7: 4] <= DATAIN[ 7: 4];
-				if (MASKWREN[2]) mem[ADDRESS][11: 8] <= DATAIN[11: 8];
-				if (MASKWREN[3]) mem[ADDRESS][15:12] <= DATAIN[15:12];
-				DATAOUT <= 16'bx;
+				if (MASKWREN[0]) mem[ADDRESS][ 3: 0] = DATAIN[ 3: 0];
+				if (MASKWREN[1]) mem[ADDRESS][ 7: 4] = DATAIN[ 7: 4];
+				if (MASKWREN[2]) mem[ADDRESS][11: 8] = DATAIN[11: 8];
+				if (MASKWREN[3]) mem[ADDRESS][15:12] = DATAIN[15:12];
+				DATAOUT <= 'bx;
 			end
 		end
 	end
@@ -2765,7 +2723,6 @@ module SB_IO_OD (
 `endif
 endmodule
 
-//(* abc9_box, lib_whitebox *) // TODO
 module SB_MAC16 (
 	input CLK, CE,
 	input [15:0] C, A, B, D,
