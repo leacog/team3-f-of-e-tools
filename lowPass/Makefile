@@ -10,7 +10,6 @@ INIT		= init
 INIT-SF		= init-sf
 
 OPTFLAGS	= -O0
-INCLUDES	= -I$(PREFIX)/include -I../port/  -I$(TREEROOT)/sys/include -I$(TREEROOT)/sys/kern/superH -I$(TREEROOT)/benchmarks/include -I$(TREEROOT)/sys/libOS/port
 CFLAGS		= -march=rv32i -mabi=ilp32 $(TARGET-ARCH-FLAGS) -Wall 
 ASFLAGS		= --march=rv32i --mabi=ilp32
 LDFLAGS		= -L$(TOOLSLIB)/$(TARGET) -Map $(PROGRAM).map -Tsail.ld
@@ -52,8 +51,8 @@ $(PROGRAM-SF).sr:$(PROGRAM-SF)
 
 install: all
 	$(SREC2HEX) -b 4096 $(PROGRAM).sr
-	cp program.hex ../../programs
-	cp data.hex ../../programs
+	cp program.hex ../verilog/hardware/processor/programs
+	cp data.hex ../verilog/hardware/processor/programs
 
 clean:
 	$(RM) init.i *.o $(PROGRAM) $(PROGRAM).sr $(PROGRAM).map

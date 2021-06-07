@@ -1,4 +1,4 @@
-TREEROOT	= ../../../..
+TREEROOT	= /data/f-of-e-tools/tools/sunflower
 include $(TREEROOT)/conf/setup.conf
 
 TARGET-ARCH	= riscv32-elf

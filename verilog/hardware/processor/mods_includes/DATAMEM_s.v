@@ -1,0 +1,2 @@
+`define USE_ONE_CYCLE_DATA_MEM 1'b1
+`define USE_SUBSETTING 1'b1

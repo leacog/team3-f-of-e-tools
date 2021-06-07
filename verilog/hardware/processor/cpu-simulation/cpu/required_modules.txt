@@ -9,7 +9,7 @@ verilog/branch_predictor.v
 verilog/control_unit.v
 verilog/cpu.v
 verilog/dataMem_mask_gen.v
-verilog/data_mem.v
+verilog/data_mem_v32.v
 verilog/forwarding_unit.v
 verilog/imm_gen.v
 verilog/instruction_mem.v

@@ -1,4 +1,5 @@
 verilator: toplevel_sim.v required_modules.txt toplevel_sim.cpp
+	cat ../../sail-core/include/mods_to_use.v
 	verilator -Wno-fatal --cc toplevel_sim.v -f required_modules.txt --exe toplevel_sim.cpp
 	cp obj_dir/* .
 	make -f Vtoplevel_sim.mk
@@ -16,11 +17,11 @@ iverilog: toplevel_sim.v required_modules.txt verilog/
 
 yosys: ../../verilog/ toplevel_sim.v
 	# Synthesise
-	yosys -p 'read_verilog ../../verilog/CSR.v ../../verilog/adder.v ../../verilog/alu.v ../../verilog/alu_control.v ../../verilog/branch_decide.v ../../verilog/branch_predictor.v ../../verilog/control_unit.v ../../verilog/cpu.v ../../verilog/dataMem_mask_gen.v ../../verilog/data_mem.v ../../verilog/forwarding_unit.v ../../verilog/imm_gen.v ../../verilog/instruction_mem.v ../../verilog/mux2to1.v ../../verilog/pipeline_registers.v ../../verilog/program_counter.v ../../verilog/register_file.v toplevel_sim.v; synth_ice40 -top top -blif toplevel_sim.blif'
+	yosys -p 'read_verilog ../../verilog/DSPadder.v ../../verilog/DSPsubtractor.v ../../verilog/CSR.v ../../verilog/adder.v ../../verilog/alu.v ../../verilog/alu_control.v ../../verilog/branch_decide.v ../../verilog/branch_predictor.v ../../verilog/control_unit.v ../../verilog/cpu.v ../../verilog/dataMem_mask_gen.v ../../verilog/data_mem.v ../../verilog/forwarding_unit.v ../../verilog/imm_gen.v ../../verilog/instruction_mem.v ../../verilog/mux2to1.v ../../verilog/pipeline_registers.v ../../verilog/program_counter.v ../../verilog/register_file.v toplevel_sim.v; synth_ice40 -top top -blif toplevel_sim.blif'
 	# Convert to verilog
 	yosys toplevel_sim.blif -o toplevel_sim_synth.v
 	# Simulate
-	iverilog toplevel_sim_synth.v -o toplevel_sim_synth
+	iverilog toplevel_sim_synth.v cells_sim.v -o toplevel_sim_synth 
 	# Tidy up
 	rm *.blif toplevel_sim_synth.v
 	#

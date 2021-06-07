@@ -1,5 +1,5 @@
 module top();
-	reg clk = 1;
+	reg clk = 0;
 
 	reg[31:0] addr;
 	wire[31:0] out;
@@ -23,7 +23,13 @@ initial begin
  	//reg[3:0] FuncCode; //bit 32 + bit 14:12
 	//reg[6:0] Opcode; //bits 6:0
 
- 	addr = 32'b0;
+ 	#0.3
+	
+	addr = 32'bxx;
+	
+	#1
+	
+	addr = 32'b0;
 
  	#6
  	
@@ -42,6 +48,7 @@ initial begin
 	addr = 32'h14;
 
 	#6
+
 
  	$finish;
 end

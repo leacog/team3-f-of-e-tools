@@ -41,7 +41,9 @@
  *	Top level entity, linking cpu with data and instruction memory.
  */
 
-module top (input clk, output [7:0] led);
+`include "/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/sail-core/include/mods_to_use.v"
+
+module top (input clk, output [7:0] led, output [31:0] inst_out_line);
 	
 	/*
 	 *	Memory interface
@@ -54,8 +56,9 @@ module top (input clk, output [7:0] led);
 	wire		data_memwrite;
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
-
-
+	
+	assign inst_out_line = inst_out;
+	
 	`ifdef USE_ONE_CYCLE_DATA_MEM
 		cpu processor(
 			.clk(clk),
@@ -93,7 +96,7 @@ module top (input clk, output [7:0] led);
 	`else
 		instruction_memory inst_mem( 
 			.addr(inst_in), 
-			.out(inst_out),
+			.out(inst_out)
 		);
 	`endif
 	
@@ -106,7 +109,7 @@ module top (input clk, output [7:0] led);
 				.memread(data_memread), 
 				.read_data(data_out),
 				.sign_mask(data_sign_mask),
-				.led(led),
+				.led(led)
 			);
 	`else
 		data_mem data_mem_inst(

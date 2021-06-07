@@ -7,16 +7,18 @@
 #MODS = ALUaddsub
 #MODS = CPUadder
 MODS = INSMEM
+#MODS = DATAMEM
 #MODS = baseline
 
 #USE_SUBSET = _s
 USE_SUBSET = 
 
 DESIGN	= sail
-VERSION = toggle_test
+VERSION = initialization2_posEdge
 
 sail-nextpnr:
 	cp mods_includes/$(MODS)$(USE_SUBSET).v sail-core/include/mods_to_use.v
+	cat sail-core/include/mods_to_use.v
 	cp programs/data.hex verilog/
 	cp programs/program.hex verilog/
 	yosys -q ../../../yscripts/$(DESIGN).ys -l logfiles/yosys_$(MODS)_$(VERSION)$(USE_SUBSET).log

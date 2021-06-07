@@ -6,13 +6,13 @@ volatile unsigned int *         gDebugLedsMemoryMappedRegister = (unsigned int *
 
 enum
 {
-	kSpinDelay = 400,
+	kSpinDelay = 1,
 };
 
 #define lowpass_input_len 96
 #define NUM_TAPS 29
 
-int lowpass_input_1kHz[] =\
+uchar lowpass_input_1kHz[] =\
 {
 	0x32,0x39,0x3f,0x45,0x4b,0x50,0x55,0x5a,
 	0x5d,0x60,0x62,0x64,0x64,0x64,0x62,0x60,
@@ -28,7 +28,7 @@ int lowpass_input_1kHz[] =\
 	0x7,0xa,0xf,0x14,0x19,0x1f,0x25,0x2b,
 };
 
-int lowpass_input_16kHz[] =\
+uchar lowpass_input_16kHz[] =\
 {	0x32,0x64,0x32,0x0,0x32,0x64,0x32,0x0,
 	0x32,0x64,0x32,0x0,0x32,0x64,0x32,0x0,
 	0x32,0x64,0x32,0x0,0x32,0x64,0x32,0x0,
@@ -43,11 +43,9 @@ int lowpass_input_16kHz[] =\
 	0x32,0x64,0x32,0x0,0x32,0x64,0x32,0x0,
 };
 
-const float firCoeffs[] =\
-{ -0.0018225230f, -0.0015879294f, +0.0000000000f, +0.0036977508f, +0.0080754303f, +0.0085302217f, -0.0000000000f, -0.0173976984f,
-  -0.0341458607f, -0.0333591565f, +0.0000000000f, +0.0676308395f, +0.1522061835f, +0.2229246956f, +0.2504960933f, +0.2229246956f,
-  +0.1522061835f, +0.0676308395f, +0.0000000000f, -0.0333591565f, -0.0341458607f, -0.0173976984f, -0.0000000000f, +0.0085302217f,
-  +0.0080754303f, +0.0036977508f, +0.0000000000f, -0.0015879294f, -0.0018225230f
+uchar firCoeffs[] =\
+{ -1, -1, 0, 3,  8, 8, 0, -17,
+  -34, -33, 0, 67, 152, 222, 250, 222,
+  152, 67, 0, -33, -34, -17, 0, 8,
+  8, 3, 0, -1, -1
 };
-
-const int maxTailLenght = 4;
