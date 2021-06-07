@@ -15,7 +15,7 @@ void sendSerial(uchar inputByte)
 
 	uchar bits = inputByte;
 	for(int i = 0; i < 8; i++) {
-		// *gDebugLedsMemoryMappedRegister = 0x0F; //Value to indicate new read for verilator
+		//*gDebugLedsMemoryMappedRegister = 0x0F; //Value to indicate new read for verilator
 		if(bits & 0x01) {
 			*gDebugLedsMemoryMappedRegister = 0xFF;
 		} else {
