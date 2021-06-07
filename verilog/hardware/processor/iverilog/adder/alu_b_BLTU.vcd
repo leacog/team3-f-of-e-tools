@@ -1,0 +1,473 @@
+$date
+	Mon Jun  7 12:23:57 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module DSPadder $end
+$var wire 32 ! input1 [31:0] $end
+$var wire 32 " input2 [31:0] $end
+$var wire 32 # out [31:0] $end
+$scope module i_sbmac16 $end
+$var wire 16 $ A [15:0] $end
+$var wire 1 % ACCUMCI $end
+$var wire 1 & ADDSUBBOT $end
+$var wire 1 ' ADDSUBTOP $end
+$var wire 1 ( AHOLD $end
+$var wire 16 ) B [15:0] $end
+$var wire 1 * BHOLD $end
+$var wire 16 + C [15:0] $end
+$var wire 1 , CE $end
+$var wire 1 - CHOLD $end
+$var wire 1 . CI $end
+$var wire 1 / CLK $end
+$var wire 1 0 CO $end
+$var wire 16 1 D [15:0] $end
+$var wire 1 2 DHOLD $end
+$var wire 1 3 HCI $end
+$var wire 1 4 IRSTBOT $end
+$var wire 1 5 IRSTTOP $end
+$var wire 1 6 LCI $end
+$var wire 1 7 OHOLDBOT $end
+$var wire 1 8 OHOLDTOP $end
+$var wire 1 9 OLOADBOT $end
+$var wire 1 : OLOADTOP $end
+$var wire 1 ; ORSTBOT $end
+$var wire 1 < ORSTTOP $end
+$var wire 16 = Oh [15:0] $end
+$var wire 16 > Ol [15:0] $end
+$var wire 1 ? SIGNEXTIN $end
+$var wire 1 @ clock $end
+$var wire 16 A iA [15:0] $end
+$var wire 16 B iB [15:0] $end
+$var wire 16 C iC [15:0] $end
+$var wire 16 D iD [15:0] $end
+$var wire 32 E iH [31:0] $end
+$var wire 16 F iP [15:0] $end
+$var wire 16 G iQ [15:0] $end
+$var wire 16 H iR [15:0] $end
+$var wire 16 I iS [15:0] $end
+$var wire 16 J iW [15:0] $end
+$var wire 16 K iX [15:0] $end
+$var wire 16 L iY [15:0] $end
+$var wire 16 M iZ [15:0] $end
+$var wire 16 N p_Al_Bl [15:0] $end
+$var wire 16 O p_Al_Bh [15:0] $end
+$var wire 16 P p_Ah_Bl [15:0] $end
+$var wire 16 Q p_Ah_Bh [15:0] $end
+$var wire 32 R iL [31:0] $end
+$var wire 24 S iK_e [23:0] $end
+$var wire 16 T iK [15:0] $end
+$var wire 24 U iJ_e [23:0] $end
+$var wire 16 V iJ [15:0] $end
+$var wire 16 W iG [15:0] $end
+$var wire 16 X iF [15:0] $end
+$var wire 16 Y YZ [15:0] $end
+$var wire 16 Z XW [15:0] $end
+$var wire 1 [ SIGNEXTOUT $end
+$var wire 32 \ O [31:0] $end
+$var wire 1 ] LCO $end
+$var wire 16 ^ Bl [15:0] $end
+$var wire 16 _ Bh [15:0] $end
+$var wire 16 ` Al [15:0] $end
+$var wire 16 a Ah [15:0] $end
+$var wire 1 b ACCUMCO $end
+$var reg 16 c rA [15:0] $end
+$var reg 16 d rB [15:0] $end
+$var reg 16 e rC [15:0] $end
+$var reg 16 f rD [15:0] $end
+$var reg 16 g rF [15:0] $end
+$var reg 16 h rG [15:0] $end
+$var reg 32 i rH [31:0] $end
+$var reg 16 j rJ [15:0] $end
+$var reg 16 k rK [15:0] $end
+$var reg 16 l rQ [15:0] $end
+$var reg 16 m rS [15:0] $end
+$upscope $end
+$upscope $end
+$scope module DSPsubtractor $end
+$var wire 32 n input1 [31:0] $end
+$var wire 32 o input2 [31:0] $end
+$var wire 32 p out [31:0] $end
+$var wire 1 q carry $end
+$scope module i_sbmac16 $end
+$var wire 16 r A [15:0] $end
+$var wire 1 s ACCUMCI $end
+$var wire 1 t ADDSUBBOT $end
+$var wire 1 u ADDSUBTOP $end
+$var wire 1 v AHOLD $end
+$var wire 16 w B [15:0] $end
+$var wire 1 x BHOLD $end
+$var wire 16 y C [15:0] $end
+$var wire 1 z CE $end
+$var wire 1 { CHOLD $end
+$var wire 1 | CI $end
+$var wire 1 } CLK $end
+$var wire 1 q CO $end
+$var wire 16 ~ D [15:0] $end
+$var wire 1 !" DHOLD $end
+$var wire 1 "" HCI $end
+$var wire 1 #" IRSTBOT $end
+$var wire 1 $" IRSTTOP $end
+$var wire 1 %" LCI $end
+$var wire 1 &" OHOLDBOT $end
+$var wire 1 '" OHOLDTOP $end
+$var wire 1 (" OLOADBOT $end
+$var wire 1 )" OLOADTOP $end
+$var wire 1 *" ORSTBOT $end
+$var wire 1 +" ORSTTOP $end
+$var wire 16 ," Oh [15:0] $end
+$var wire 16 -" Ol [15:0] $end
+$var wire 1 ." SIGNEXTIN $end
+$var wire 1 /" clock $end
+$var wire 16 0" iA [15:0] $end
+$var wire 16 1" iB [15:0] $end
+$var wire 16 2" iC [15:0] $end
+$var wire 16 3" iD [15:0] $end
+$var wire 32 4" iH [31:0] $end
+$var wire 16 5" iP [15:0] $end
+$var wire 16 6" iQ [15:0] $end
+$var wire 16 7" iR [15:0] $end
+$var wire 16 8" iS [15:0] $end
+$var wire 16 9" iW [15:0] $end
+$var wire 16 :" iX [15:0] $end
+$var wire 16 ;" iY [15:0] $end
+$var wire 16 <" iZ [15:0] $end
+$var wire 16 =" p_Al_Bl [15:0] $end
+$var wire 16 >" p_Al_Bh [15:0] $end
+$var wire 16 ?" p_Ah_Bl [15:0] $end
+$var wire 16 @" p_Ah_Bh [15:0] $end
+$var wire 32 A" iL [31:0] $end
+$var wire 24 B" iK_e [23:0] $end
+$var wire 16 C" iK [15:0] $end
+$var wire 24 D" iJ_e [23:0] $end
+$var wire 16 E" iJ [15:0] $end
+$var wire 16 F" iG [15:0] $end
+$var wire 16 G" iF [15:0] $end
+$var wire 16 H" YZ [15:0] $end
+$var wire 16 I" XW [15:0] $end
+$var wire 1 J" SIGNEXTOUT $end
+$var wire 32 K" O [31:0] $end
+$var wire 1 L" LCO $end
+$var wire 16 M" Bl [15:0] $end
+$var wire 16 N" Bh [15:0] $end
+$var wire 16 O" Al [15:0] $end
+$var wire 16 P" Ah [15:0] $end
+$var wire 1 Q" ACCUMCO $end
+$var reg 16 R" rA [15:0] $end
+$var reg 16 S" rB [15:0] $end
+$var reg 16 T" rC [15:0] $end
+$var reg 16 U" rD [15:0] $end
+$var reg 16 V" rF [15:0] $end
+$var reg 16 W" rG [15:0] $end
+$var reg 32 X" rH [31:0] $end
+$var reg 16 Y" rJ [15:0] $end
+$var reg 16 Z" rK [15:0] $end
+$var reg 16 [" rQ [15:0] $end
+$var reg 16 \" rS [15:0] $end
+$upscope $end
+$upscope $end
+$scope module top $end
+$var wire 1 ]" Branch_Enable $end
+$var wire 7 ^" AluCtl_wire [6:0] $end
+$var wire 32 _" ALUOut [31:0] $end
+$var reg 32 `" A [31:0] $end
+$var reg 32 a" B [31:0] $end
+$var reg 4 b" FuncCode [3:0] $end
+$var reg 7 c" Opcode [6:0] $end
+$var reg 1 d" clk $end
+$scope module aluCtrl_inst $end
+$var wire 4 e" FuncCode [3:0] $end
+$var wire 7 f" Opcode [6:0] $end
+$var reg 7 g" ALUCtl [6:0] $end
+$upscope $end
+$scope module alu_inst $end
+$var wire 32 h" A [31:0] $end
+$var wire 7 i" ALUctl [6:0] $end
+$var wire 32 j" B [31:0] $end
+$var reg 32 k" ALUOut [31:0] $end
+$var reg 1 ]" Branch_Enable $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b0 k"
+b0 j"
+b1111 i"
+b0 h"
+b1111 g"
+b0 f"
+b110 e"
+0d"
+b0 c"
+b110 b"
+b0 a"
+b0 `"
+b0 _"
+b1111 ^"
+0]"
+bx \"
+bx ["
+bx Z"
+bx Y"
+bx X"
+bx W"
+bx V"
+bx U"
+bx T"
+bx S"
+bx R"
+xQ"
+b0zzzzzzzz P"
+b0zzzzzzzz O"
+b0zzzzzzzz N"
+b0zzzzzzzz M"
+xL"
+bx K"
+zJ"
+bx I"
+bx H"
+bx G"
+bx F"
+bx E"
+b0xxxxxxxxxxxxxxxx D"
+bx C"
+b0xxxxxxxxxxxxxxxx B"
+bx A"
+bx @"
+bx ?"
+bx >"
+bx ="
+bz <"
+bz ;"
+bz :"
+bz 9"
+bx 8"
+bx 7"
+bx 6"
+bx 5"
+bx 4"
+bz 3"
+bz 2"
+bz 1"
+bz 0"
+0/"
+0."
+bx -"
+bx ,"
+0+"
+0*"
+0)"
+0("
+0'"
+0&"
+0%"
+0$"
+0#"
+x""
+0!"
+bz ~
+0}
+0|
+0{
+0z
+bz y
+0x
+bz w
+0v
+1u
+1t
+0s
+bz r
+xq
+bx p
+bz o
+bz n
+bx m
+bx l
+bx k
+bx j
+bx i
+bx h
+bx g
+bx f
+bx e
+bx d
+bx c
+xb
+b0zzzzzzzz a
+b0zzzzzzzz `
+b0zzzzzzzz _
+b0zzzzzzzz ^
+x]
+bx \
+z[
+bx Z
+bx Y
+bx X
+bx W
+bx V
+b0xxxxxxxxxxxxxxxx U
+bx T
+b0xxxxxxxxxxxxxxxx S
+bx R
+bx Q
+bx P
+bx O
+bx N
+bz M
+bz L
+bz K
+bz J
+bx I
+bx H
+bx G
+bx F
+bx E
+bz D
+bz C
+bz B
+bz A
+x@
+0?
+bx >
+bx =
+0<
+0;
+0:
+09
+08
+07
+06
+05
+04
+x3
+02
+bz 1
+x0
+z/
+0.
+0-
+0,
+bz +
+0*
+bz )
+0(
+0'
+0&
+0%
+bz $
+bx #
+bz "
+bz !
+$end
+#1
+1d"
+#2
+0d"
+#3
+1d"
+#4
+0d"
+#5
+1]"
+b11111111111111111111111111111110 _"
+b11111111111111111111111111111110 k"
+b1010110 ^"
+b1010110 g"
+b1010110 i"
+1d"
+b1100011 c"
+b1100011 f"
+b10 a"
+b10 j"
+#6
+0d"
+#7
+1d"
+#8
+0d"
+#9
+1d"
+#10
+0]"
+b0 _"
+b0 k"
+0d"
+b1001 a"
+b1001 j"
+b1001 `"
+b1001 h"
+#11
+1d"
+#12
+0d"
+#13
+1d"
+#14
+0d"
+#15
+b1 _"
+b1 k"
+1d"
+b10 a"
+b10 j"
+b11 `"
+b11 h"
+#16
+0d"
+#17
+1d"
+#18
+0d"
+#19
+1d"
+#20
+0d"
+b11110010 a"
+b11110010 j"
+b11110011 `"
+b11110011 h"
+#21
+1d"
+#22
+0d"
+#23
+1d"
+#24
+0d"
+#25
+b0 _"
+b0 k"
+1d"
+b11110011 a"
+b11110011 j"
+#26
+0d"
+#27
+1d"
+#28
+0d"
+#29
+1d"
+#30
+1]"
+b11111111111111111111111111111111 _"
+b11111111111111111111111111111111 k"
+0d"
+b11110100 a"
+b11110100 j"
+#31
+1d"
+#32
+0d"
+#33
+1d"
+#34
+0d"
+#35
+1d"
