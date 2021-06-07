@@ -1,26 +1,10 @@
-
-`ifndef NO_ICE40_DEFAULT_ASSIGNMENTS
-`define ICE40_DEFAULT_ASSIGNMENT_V(v) = v
-`define ICE40_DEFAULT_ASSIGNMENT_0 = 1'b0
-`define ICE40_DEFAULT_ASSIGNMENT_1 = 1'b1
-`else
-`define ICE40_DEFAULT_ASSIGNMENT_V(v)
-`define ICE40_DEFAULT_ASSIGNMENT_0
-`define ICE40_DEFAULT_ASSIGNMENT_1
-`endif
-
 module SB_RAM40_4K (
 	output [15:0] RDATA,
-	input         RCLK,
-	input         RCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         RE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         RCLK, RCLKE, RE,
 	input  [10:0] RADDR,
-	input         WCLK,
-	input         WCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         WE `ICE40_DEFAULT_ASSIGNMENT_0,
+	input         WCLK, WCLKE, WE,
 	input  [10:0] WADDR,
-	input  [15:0] MASK `ICE40_DEFAULT_ASSIGNMENT_V(16'h 0000),
-	input  [15:0] WDATA
+	input  [15:0] MASK, WDATA
 );
 	// MODE 0:  256 x 16
 	// MODE 1:  512 x 8
@@ -244,142 +228,6 @@ module SB_RAM40_4K (
 		$setup(WE, posedge WCLK, 252);
 		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L13026
 		(posedge RCLK => (RDATA : 16'bx)) = 1179;
-	endspecify
-`endif
-endmodule
-
-module SB_RAM40_4KNR (
-	output [15:0] RDATA,
-	input         RCLKN,
-	input         RCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         RE `ICE40_DEFAULT_ASSIGNMENT_0,
-	input  [10:0] RADDR,
-	input         WCLK,
-	input         WCLKE `ICE40_DEFAULT_ASSIGNMENT_1,
-	input         WE `ICE40_DEFAULT_ASSIGNMENT_0,
-	input  [10:0] WADDR,
-	input  [15:0] MASK `ICE40_DEFAULT_ASSIGNMENT_V(16'h 0000),
-	input  [15:0] WDATA
-);
-	parameter WRITE_MODE = 0;
-	parameter READ_MODE = 0;
-
-	parameter INIT_0 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_1 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_2 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_3 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_4 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_5 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_6 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_7 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_8 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_9 = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_A = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_B = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_C = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_D = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_E = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-	parameter INIT_F = 256'h0000000000000000000000000000000000000000000000000000000000000000;
-
-	parameter INIT_FILE = "";
-
-	SB_RAM40_4K #(
-		.WRITE_MODE(WRITE_MODE),
-		.READ_MODE (READ_MODE ),
-		.INIT_0    (INIT_0    ),
-		.INIT_1    (INIT_1    ),
-		.INIT_2    (INIT_2    ),
-		.INIT_3    (INIT_3    ),
-		.INIT_4    (INIT_4    ),
-		.INIT_5    (INIT_5    ),
-		.INIT_6    (INIT_6    ),
-		.INIT_7    (INIT_7    ),
-		.INIT_8    (INIT_8    ),
-		.INIT_9    (INIT_9    ),
-		.INIT_A    (INIT_A    ),
-		.INIT_B    (INIT_B    ),
-		.INIT_C    (INIT_C    ),
-		.INIT_D    (INIT_D    ),
-		.INIT_E    (INIT_E    ),
-		.INIT_F    (INIT_F    ),
-		.INIT_FILE (INIT_FILE )
-	) RAM (
-		.RDATA(RDATA),
-		.RCLK (~RCLKN),
-		.RCLKE(RCLKE),
-		.RE   (RE   ),
-		.RADDR(RADDR),
-		.WCLK (WCLK ),
-		.WCLKE(WCLKE),
-		.WE   (WE   ),
-		.WADDR(WADDR),
-		.MASK (MASK ),
-		.WDATA(WDATA)
-	);
-`ifdef ICE40_HX
-	specify
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L343-L358
-		$setup(MASK, posedge WCLK &&& WE && WCLKE, 274);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L359-L369
-		$setup(RADDR, posedge RCLKN &&& RE && RCLKE, 203);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L370
-		$setup(RCLKE, posedge RCLKN, 267);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L371
-		$setup(RE, posedge RCLKN, 98);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L372-L382
-		$setup(WADDR, posedge WCLK &&& WE && WCLKE, 224);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L383
-		$setup(WCLKE, posedge WCLK, 267);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L384-L399
-		$setup(WDATA, posedge WCLK &&& WE && WCLKE, 161);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L400
-		$setup(WE, posedge WCLK, 133);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_hx1k.txt#L401
-		(posedge RCLKN => (RDATA : 16'bx)) = 2146;
-	endspecify
-`endif
-`ifdef ICE40_LP
-	specify
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L343-L358
-		$setup(MASK, posedge WCLK &&& WE && WCLKE, 403);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L359-L369
-		$setup(RADDR, posedge RCLKN &&& RE && RCLKE, 300);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L370
-		$setup(RCLKE, posedge RCLKN, 393);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L371
-		$setup(RE, posedge RCLKN, 145);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L372-L382
-		$setup(WADDR, posedge WCLK &&& WE && WCLKE, 331);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L383
-		$setup(WCLKE, posedge WCLK, 393);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L384-L399
-		$setup(WDATA, posedge WCLK &&& WE && WCLKE, 238);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L400
-		$setup(WE, posedge WCLK, 196);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_lp1k.txt#L401
-		(posedge RCLKN => (RDATA : 16'bx)) = 3163;
-	endspecify
-`endif
-`ifdef ICE40_U
-	specify
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L12968-12983
-		$setup(MASK, posedge WCLK &&& WE && WCLKE, 517);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L12984-12994
-		$setup(RADDR, posedge RCLKN &&& RE && RCLKE, 384);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L12995
-		$setup(RCLKE, posedge RCLKN, 503);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L12996
-		$setup(RE, posedge RCLKN, 185);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L12997-13007
-		$setup(WADDR, posedge WCLK &&& WE && WCLKE, 424);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L13008
-		$setup(WCLKE, posedge WCLK, 503);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L13009-13024
-		$setup(WDATA, posedge WCLK &&& WE && WCLKE, 305);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L13025
-		$setup(WE, posedge WCLK, 252);
-		// https://github.com/cliffordwolf/icestorm/blob/95949315364f8d9b0c693386aefadf44b28e2cf6/icefuzz/timings_up5k.txt#L13026
-		(posedge RCLKN => (RDATA : 16'bx)) = 1179;
 	endspecify
 `endif
 endmodule
