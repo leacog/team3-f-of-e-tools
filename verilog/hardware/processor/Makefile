@@ -6,15 +6,15 @@
 #MODS = ALUsubtractor
 #MODS = ALUaddsub
 #MODS = CPUadder
-MODS = INSMEM
+#MODS = INSMEM
 #MODS = DATAMEM
-#MODS = baseline
+MODS = baseline
 
 #USE_SUBSET = _s
 USE_SUBSET = 
 
 DESIGN	= sail
-VERSION = initialization2_posEdge
+VERSION = maxSubet
 
 sail-nextpnr:
 	cp mods_includes/$(MODS)$(USE_SUBSET).v sail-core/include/mods_to_use.v

@@ -1,3 +1,5 @@
+`define FUNC 4'b111
+
 module top();
 	reg clk = 0;
 
@@ -40,82 +42,57 @@ initial begin
 
  	A = 32'b0;
  	B = 32'b0;
- 	FuncCode = 4'b0;
+ 	FuncCode = `FUNC;
  	Opcode = 7'b0;
 
  	#5
-
- 	//simulate AND instruction
- 	A = 32'b00001111;
- 	B = 32'b01010101;
- 	FuncCode = 4'b0111;
- 	Opcode = 7'b0110011;
-
- 	#5
-
- 	//simulate OR instruction
- 	A = 32'b00001111;
- 	B = 32'b01010101;
- 	FuncCode = 4'b0110;
- 	Opcode = 7'b0110011;
-
- 	#5
-
- 	//simulate ADD instruction
- 	A = 32'd10000;
- 	B = 32'd0111;
- 	FuncCode = 4'b0000;
- 	Opcode = 7'b0110011;
-
- 	#5
-
- 	//simulate SUB instruction
- 	A = 32'd10000;
- 	B = 32'd0111;
- 	FuncCode = 4'b1000;
- 	Opcode = 7'b0110011;
-
- 	#5
-
  	//simulate SLT instuction
  	A = 32'b0;
  	B = 32'b10;
- 	FuncCode = 4'b0010;
- 	Opcode = 7'b0110011;
+ 	FuncCode = `FUNC;
+ 	Opcode = 7'b1100011;
 
  	#5
 
- 	//simulate SRL instruction
- 	A = 32'b10000;
+	//simulate SLT instuction
+ 	A = 32'b1001;
+ 	B = 32'b1001;
+ 	FuncCode = `FUNC;
+ 	Opcode = 7'b1100011;
+
+	#5
+	
+	//simulate SLT instuction
+ 	A = 32'b11;
  	B = 32'b10;
- 	FuncCode = 4'b0101;
- 	Opcode = 7'b0110011;
+ 	FuncCode = `FUNC;
+ 	Opcode = 7'b1100011;
+
+ 	#5
+	//simulate SLT instuction
+ 	A = 32'hf3;
+ 	B = 32'hf2;
+ 	FuncCode = `FUNC;
+ 	Opcode = 7'b1100011;
 
  	#5
 
- 	//simulate SRA instruction
- 	A = 32'b1000;
- 	B = 32'b1;
- 	FuncCode = 4'b1101;
- 	Opcode = 7'b0110011;
+	//simulate SLT instuction
+ 	A = 32'hf3;
+ 	B = 32'hf3;
+ 	FuncCode = `FUNC;
+ 	Opcode = 7'b1100011;
 
  	#5
 
- 	//simulate SLL instruction
- 	A = 32'b10;
- 	B = 32'b10;
- 	FuncCode = 4'b0001;
- 	Opcode = 7'b0110011;
+	//simulate SLT instuction
+ 	A = 32'hf3;
+ 	B = 32'hf4;
+ 	FuncCode = `FUNC;
+ 	Opcode = 7'b1100011;
 
  	#5
 
- 	//simulate XOR instruction
- 	A = 32'b01010101;
- 	B = 32'b11111111;
- 	FuncCode = 4'b0100;
- 	Opcode = 7'b0110011;
-
- 	#5
 
  	$finish;
 end
