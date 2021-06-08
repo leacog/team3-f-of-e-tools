@@ -25,7 +25,7 @@ initial begin
 
  	#0.3
 	
-	addr = 32'bxx;
+	addr = 32'd1;
 	
 	#1
 	
@@ -33,16 +33,16 @@ initial begin
 
  	#6
  	
-	addr = 32'h4;
+	addr = 32'b1101101100;
 
 	#6
-	addr = 32'h8;
+	addr = 32'b11010110100;
 
 	#6
-	addr = 32'hc;
+	addr = 32'b100111100100;
 
 	#6
-	addr = 32'h10;
+	addr = 32'b111110110000;
 
 	#6
 	addr = 32'h14;

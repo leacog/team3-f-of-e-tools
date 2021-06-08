@@ -12,9 +12,11 @@ verilog/dataMem_mask_gen.v
 verilog/data_mem_v32.v
 verilog/forwarding_unit.v
 verilog/imm_gen.v
-verilog/instruction_mem.v
+verilog/instruction_mem_explicit.v
 verilog/mux2to1.v
 verilog/pipeline_registers.v
 verilog/program_counter.v
 verilog/register_file.v
+verilog/SB_RAM1024x4
 ice40-primitives/SB_MAC16.v
+ice40-primitives/SB_RAM40_4K.v

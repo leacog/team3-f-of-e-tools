@@ -21,7 +21,7 @@ sail-nextpnr:
 	cat sail-core/include/mods_to_use.v
 	cp programs/data.hex verilog/
 	cp programs/program.hex verilog/
-	python3 sail-core/defparamScript/defparamScript.py verilog/program.hex
+	python3 sail-core/defparamScript/defparamScript2.py verilog/program.hex
 	yosys -q ../../../yscripts/$(DESIGN).ys -l logfiles/yosys_$(MODS)_$(VERSION)$(USE_SUBSET).log
 	nextpnr-ice40 --up5k --package uwg30 --json $(DESIGN).json --pcf pcf/$(DESIGN).pcf --asc $(DESIGN).asc -l logfiles/nextpnr_$(MODS)_$(VERSION)$(USE_SUBSET).log
 	icetime -p pcf/$(DESIGN).pcf -P uwg30 -d up5k -t $(DESIGN).asc

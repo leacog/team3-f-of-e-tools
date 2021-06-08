@@ -110,7 +110,7 @@ module top (led);
 		instruction_memory_bram inst_mem( 
 			.addr(inst_in), 
 			.out(inst_out),
-			.clk(clk)
+			.clk(clk),
 		);
 	`else
 		instruction_memory inst_mem( 

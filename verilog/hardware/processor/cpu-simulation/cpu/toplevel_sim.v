@@ -43,7 +43,7 @@
 
 `include "/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/sail-core/include/mods_to_use.v"
 
-module top (input clk, output [7:0] led, output [31:0] inst_out_line);
+module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31:0] address_out_line);
 	
 	/*
 	 *	Memory interface
@@ -58,6 +58,7 @@ module top (input clk, output [7:0] led, output [31:0] inst_out_line);
 	wire[3:0]	data_sign_mask;
 	
 	assign inst_out_line = inst_out;
+	assign address_out_line = inst_in;
 	
 	`ifdef USE_ONE_CYCLE_DATA_MEM
 		cpu processor(

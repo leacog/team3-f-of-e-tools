@@ -4,11 +4,13 @@
 #include "Vtoplevel_sim.h"
 #include <bitset>
 #include <string>
+#include <iomanip>
 
 vluint64_t vtime = 0;
 bool clk = false;
 int led = 255;
 bool newRead = 0;
+int instr = 0;
 
 int main(int argc, char** argv, char** env)
 {
@@ -20,8 +22,13 @@ int main(int argc, char** argv, char** env)
 		clk = not clk;
 		top->clk = int(clk);
 		top->eval();
-		//std::bitset<32> instruction (top->inst_out_line);
-		//std::cout << instruction << "\n";
+		if(instr < 20){
+			int instruction = (top->inst_out_line);
+			std::cout << std::setfill ('0') << std::setw(8) << std::hex << instruction << "\n";
+			std::bitset<32> address (top->address_out_line);
+			std::cout << address << "\n" << "\n";
+			instr ++;
+		}
 		if (int(top->led) == 0x0F && !newRead)
 		{
 			newRead = true;		
