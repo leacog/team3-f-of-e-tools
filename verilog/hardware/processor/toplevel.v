@@ -70,6 +70,7 @@ module top (led);
 	 */
 	wire[31:0]	inst_in;
 	wire[31:0]	inst_in_pup;
+	wire[31:0]	inst_out_pup;
 	wire[31:0]	inst_out;
 	wire[31:0]	data_out;
 	wire[31:0]	data_addr;
@@ -84,6 +85,7 @@ module top (led);
 	end
 
 	assign inst_in_pup = (started) ? inst_in : 32'b0;
+	assign inst_out = (started) ? inst_out_pup : 32'h13;
 
 	always @(posedge clk) begin
 		if (!started) begin
@@ -123,7 +125,7 @@ module top (led);
 	`ifdef USE_INSTRUCTION_MEM_BRAM  //Doesn't seem to like nesting inputs and outputs in ifdef statements
 		instruction_memory_bram inst_mem( 
 			.addr(inst_in_pup), 
-			.out(inst_out),
+			.out(inst_out_pup),
 			.clk(clk),
 		);
 	`else

@@ -48,13 +48,11 @@
 	`include "/home/students/mec77/team3-f-of-e-tools/verilog/hardware/processor/sail-core/include/full-isa-includes.v"
 `endif
 
-module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31:0] address_out_line);
+module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31:0] address_out_line, output started_out);
 	
 	/*
 	 *	Memory interface
 	 */
-	wire 	cpu_clk;
-
 	wire[31:0]	inst_in;
 	wire[31:0]	inst_in_pup;
 	wire[31:0]	inst_out;
@@ -64,14 +62,16 @@ module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31
 	wire		data_memwrite;
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
-	
-	reg started = 0;
+
+	assign inst_out_line = inst_out;
+	assign address_out_line = inst_in_pup;
+	assign started_out = started;
+	reg started;
 
 	initial begin
 		started = 0;
 	end
 
-	assign cpu_clk = (started) ? clk : 1'b0;
 	assign inst_in_pup = (started) ? inst_in : 32'b0;
 
 	always @(posedge clk) begin
@@ -82,9 +82,7 @@ module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31
 
 	`ifdef USE_ONE_CYCLE_DATA_MEM
 		cpu processor(
-			.reset(!started),
 			.clk(clk),
-			.main_clk(clk),
 			.inst_mem_in(inst_in),
 			.inst_mem_out(inst_out),
 			.data_mem_out(data_out),

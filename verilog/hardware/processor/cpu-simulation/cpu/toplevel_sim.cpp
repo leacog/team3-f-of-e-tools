@@ -23,6 +23,7 @@ int main(int argc, char** argv, char** env)
 		top->clk = int(clk);
 		top->eval();
 		if(instr < 20){
+			std::cout << (int)top->started_out << "\n";
 			int instruction = (top->inst_out_line);
 			std::cout << std::setfill ('0') << std::setw(8) << std::hex << instruction << "\n";
 			std::bitset<32> address (top->address_out_line);
