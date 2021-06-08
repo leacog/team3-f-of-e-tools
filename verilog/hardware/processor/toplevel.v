@@ -51,8 +51,7 @@
 module top (led);
 	output [7:0]	led;
 	
-	wire		clk;
-	wire 	cpu_clk;
+	wire	clk;
 	reg		ENCLKHF		= 1'b1;	// Plock enable
 	reg		CLKHF_POWERUP	= 1'b1;	// Power up the HFOSC circuit
 
@@ -78,13 +77,12 @@ module top (led);
 	wire		data_memwrite;
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
-	reg started = 0;
+	reg started;
 
 	initial begin
 		started = 0;
 	end
 
-	assign cpu_clk = (started) ? clk : 1'b0;
 	assign inst_in_pup = (started) ? inst_in : 32'b0;
 
 	always @(posedge clk) begin
@@ -95,9 +93,7 @@ module top (led);
 
 	`ifdef USE_ONE_CYCLE_DATA_MEM
 		cpu processor(
-			.reset(!started),
-			.clk(cpu_clk),
-			.main_clk(clk),
+			.clk(clk),
 			.inst_mem_in(inst_in),
 			.inst_mem_out(inst_out),
 			.data_mem_out(data_out),
@@ -107,6 +103,7 @@ module top (led);
 			.data_mem_memread(data_memread),
 			.data_mem_sign_mask(data_sign_mask)
 		);
+
 	`else
 		wire		clk_proc;
 		wire		data_clk_stall; 
