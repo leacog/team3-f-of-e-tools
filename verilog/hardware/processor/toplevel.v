@@ -52,6 +52,7 @@ module top (led);
 	output [7:0]	led;
 	
 	wire		clk;
+	wire 	cpu_clk;
 	reg		ENCLKHF		= 1'b1;	// Plock enable
 	reg		CLKHF_POWERUP	= 1'b1;	// Power up the HFOSC circuit
 
@@ -69,6 +70,7 @@ module top (led);
 	 *	Memory interface
 	 */
 	wire[31:0]	inst_in;
+	wire[31:0]	inst_in_pup;
 	wire[31:0]	inst_out;
 	wire[31:0]	data_out;
 	wire[31:0]	data_addr;
@@ -76,11 +78,26 @@ module top (led);
 	wire		data_memwrite;
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
+	reg started = 0;
 
+	initial begin
+		started = 0;
+	end
+
+	assign cpu_clk = (started) ? clk : 1'b0;
+	assign inst_in_pup = (started) ? inst_in : 32'b0;
+
+	always @(posedge clk) begin
+		if (!started) begin
+			started <= 1;
+		end
+	end
 
 	`ifdef USE_ONE_CYCLE_DATA_MEM
 		cpu processor(
-			.clk(clk),
+			.reset(!started),
+			.clk(cpu_clk),
+			.main_clk(clk),
 			.inst_mem_in(inst_in),
 			.inst_mem_out(inst_out),
 			.data_mem_out(data_out),
@@ -108,7 +125,7 @@ module top (led);
 
 	`ifdef USE_INSTRUCTION_MEM_BRAM  //Doesn't seem to like nesting inputs and outputs in ifdef statements
 		instruction_memory_bram inst_mem( 
-			.addr(inst_in), 
+			.addr(inst_in_pup), 
 			.out(inst_out),
 			.clk(clk),
 		);
