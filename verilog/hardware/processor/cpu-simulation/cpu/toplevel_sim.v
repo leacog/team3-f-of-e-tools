@@ -54,7 +54,7 @@ module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31
 	 *	Memory interface
 	 */
 	wire[31:0]	inst_in;
-	wire[31:0]	inst_in_pup;
+
 	wire[31:0]	inst_out;
 	wire[31:0]	data_out;
 	wire[31:0]	data_addr;
@@ -63,22 +63,27 @@ module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31
 	wire		data_memread;
 	wire[3:0]	data_sign_mask;
 
-	assign inst_out_line = inst_out;
-	assign address_out_line = inst_in_pup;
-	assign started_out = started;
-	reg started;
 
-	initial begin
-		started = 0;
-	end
+	`ifdef USE_INSTRUCTION_MEM_BRAM
+		assign inst_out_line = inst_out;
+		assign address_out_line = inst_in_pup;
+		assign started_out = started; 
+		reg started;
 
-	assign inst_in_pup = (started) ? inst_in : 32'b0;
-
-	always @(posedge clk) begin
-		if (!started) begin
-			started <= 1;
+		initial begin
+			started = 0;
 		end
-	end
+
+		always @(posedge clk) begin
+			if (!started) begin
+				started <= 1;
+			end
+		end
+	`else
+		assign inst_out_line = inst_out;
+		assign address_out_line = inst_in;
+		assign started_out = 0;
+	`endif
 
 	`ifdef USE_ONE_CYCLE_DATA_MEM
 		cpu processor(
@@ -109,9 +114,13 @@ module top (input clk, output [7:0] led, output [31:0] inst_out_line, output [31
 	`endif
 
 	`ifdef USE_INSTRUCTION_MEM_BRAM  //Doesn't seem to like nesting inputs and outputs in ifdef statements
+		wire[31:0]	inst_in_pup;
+		wire[31:0]	inst_out_pup;
+		assign inst_in_pup = (started) ? inst_in : 32'b0;
+		assign inst_out = (started) ? inst_out_pup : 32'h13;
 		instruction_memory_bram inst_mem( 
-			.addr(inst_in), 
-			.out(inst_out),
+			.addr(inst_in_pup), 
+			.out(inst_out_pup),
 			.clk(clk)
 		);
 	`else
