@@ -51,6 +51,7 @@
 module top (led);
 	output [7:0]	led;
 	
+	wire		clkfull;
 	wire		clk;
 	reg		ENCLKHF		= 1'b1;	// Plock enable
 	reg		CLKHF_POWERUP	= 1'b1;	// Power up the HFOSC circuit
@@ -59,11 +60,29 @@ module top (led);
 	/*
 	 *	Use the iCE40's hard primitive for the clock source.
 	 */
-	SB_HFOSC #(.CLKHF_DIV("0b10")) OSCInst0 (
+	SB_HFOSC #(.CLKHF_DIV("0b00")) OSCInst0 (
 		.CLKHFEN(ENCLKHF),
 		.CLKHFPU(CLKHF_POWERUP),
-		.CLKHF(clk)
+		.CLKHF(clkfull)
 	);
+
+	/*
+	pll_clk pll_clk_inst(
+		.clk_hf(clk_hf),
+		.clk(clk)
+	);
+	*/
+
+	reg[1:0] counter=2'd0;
+	parameter DIVISOR = 2'd3;
+	// The frequency of the output clk_out
+	//  = The frequency of the input clk_in divided by DIVISOR
+	always @(posedge clkfull) begin
+ 		counter <= counter + 2'd1;
+ 		if(counter>=(DIVISOR-1))
+			counter <= 2'd0;
+ 		clk <= (counter<DIVISOR/2) ? 1'b1:1'b0;
+	end
 
 	/*
 	 *	Memory interface
