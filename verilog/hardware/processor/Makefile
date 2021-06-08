@@ -8,13 +8,15 @@
 #MODS = CPUadder
 #MODS = INSMEM
 #MODS = DATAMEM
-MODS = baseline
+#MODS = baseline
+#MODS = DMEM_DSPadders_BranchPred
+MODS = I_D_MEM_DSP_Branch
 
-#USE_SUBSET = _s
-USE_SUBSET = 
+USE_SUBSET = _s
+#USE_SUBSET = 
 
 DESIGN	= sail
-VERSION = maxSubet
+VERSION = compete
 
 sail-nextpnr:
 	cp mods_includes/$(MODS)$(USE_SUBSET).v sail-core/include/mods_to_use.v
