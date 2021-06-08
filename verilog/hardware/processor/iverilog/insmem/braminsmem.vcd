@@ -1,5 +1,5 @@
 $date
-	Fri Jun  4 11:17:14 2021
+	Tue Jun  8 01:02:10 2021
 $end
 $version
 	Icarus Verilog
@@ -15,32 +15,562 @@ $scope module insmem $end
 $var wire 32 $ addr [31:0] $end
 $var wire 1 # clk $end
 $var wire 32 % out [31:0] $end
-$var reg 32 & out_mem [31:0] $end
-$var reg 32 ' out_start [31:0] $end
-$var reg 1 ( running $end
+$scope module mem_cell_1 $end
+$var wire 10 & RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 ' RCLKE $end
+$var wire 1 ( RE $end
+$var wire 10 ) WADDR [9:0] $end
+$var wire 1 * WCLK $end
+$var wire 1 + WCLKE $end
+$var wire 4 , WDATA [3:0] $end
+$var wire 1 - WE $end
+$var wire 16 . _1_ [15:0] $end
+$var wire 16 / _0_ [15:0] $end
+$var wire 4 0 RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 1 MASK [15:0] $end
+$var wire 11 2 RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 ' RCLKE $end
+$var wire 1 ( RE $end
+$var wire 11 3 WADDR [10:0] $end
+$var wire 1 * WCLK $end
+$var wire 1 + WCLKE $end
+$var wire 16 4 WDATA [15:0] $end
+$var wire 1 - WE $end
+$var wire 16 5 WMASK_I [15:0] $end
+$var wire 16 6 WDATA_I [15:0] $end
+$var wire 16 7 RMASK_I [15:0] $end
+$var wire 16 8 RDATA [15:0] $end
+$var reg 16 9 RDATA_I [15:0] $end
+$var integer 32 : i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module mem_cell_2 $end
+$var wire 10 ; RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 < RCLKE $end
+$var wire 1 = RE $end
+$var wire 10 > WADDR [9:0] $end
+$var wire 1 ? WCLK $end
+$var wire 1 @ WCLKE $end
+$var wire 4 A WDATA [3:0] $end
+$var wire 1 B WE $end
+$var wire 16 C _1_ [15:0] $end
+$var wire 16 D _0_ [15:0] $end
+$var wire 4 E RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 F MASK [15:0] $end
+$var wire 11 G RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 < RCLKE $end
+$var wire 1 = RE $end
+$var wire 11 H WADDR [10:0] $end
+$var wire 1 ? WCLK $end
+$var wire 1 @ WCLKE $end
+$var wire 16 I WDATA [15:0] $end
+$var wire 1 B WE $end
+$var wire 16 J WMASK_I [15:0] $end
+$var wire 16 K WDATA_I [15:0] $end
+$var wire 16 L RMASK_I [15:0] $end
+$var wire 16 M RDATA [15:0] $end
+$var reg 16 N RDATA_I [15:0] $end
+$var integer 32 O i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module mem_cell_3 $end
+$var wire 10 P RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 Q RCLKE $end
+$var wire 1 R RE $end
+$var wire 10 S WADDR [9:0] $end
+$var wire 1 T WCLK $end
+$var wire 1 U WCLKE $end
+$var wire 4 V WDATA [3:0] $end
+$var wire 1 W WE $end
+$var wire 16 X _1_ [15:0] $end
+$var wire 16 Y _0_ [15:0] $end
+$var wire 4 Z RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 [ MASK [15:0] $end
+$var wire 11 \ RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 Q RCLKE $end
+$var wire 1 R RE $end
+$var wire 11 ] WADDR [10:0] $end
+$var wire 1 T WCLK $end
+$var wire 1 U WCLKE $end
+$var wire 16 ^ WDATA [15:0] $end
+$var wire 1 W WE $end
+$var wire 16 _ WMASK_I [15:0] $end
+$var wire 16 ` WDATA_I [15:0] $end
+$var wire 16 a RMASK_I [15:0] $end
+$var wire 16 b RDATA [15:0] $end
+$var reg 16 c RDATA_I [15:0] $end
+$var integer 32 d i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module mem_cell_4 $end
+$var wire 10 e RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 f RCLKE $end
+$var wire 1 g RE $end
+$var wire 10 h WADDR [9:0] $end
+$var wire 1 i WCLK $end
+$var wire 1 j WCLKE $end
+$var wire 4 k WDATA [3:0] $end
+$var wire 1 l WE $end
+$var wire 16 m _1_ [15:0] $end
+$var wire 16 n _0_ [15:0] $end
+$var wire 4 o RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 p MASK [15:0] $end
+$var wire 11 q RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 f RCLKE $end
+$var wire 1 g RE $end
+$var wire 11 r WADDR [10:0] $end
+$var wire 1 i WCLK $end
+$var wire 1 j WCLKE $end
+$var wire 16 s WDATA [15:0] $end
+$var wire 1 l WE $end
+$var wire 16 t WMASK_I [15:0] $end
+$var wire 16 u WDATA_I [15:0] $end
+$var wire 16 v RMASK_I [15:0] $end
+$var wire 16 w RDATA [15:0] $end
+$var reg 16 x RDATA_I [15:0] $end
+$var integer 32 y i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module mem_cell_5 $end
+$var wire 10 z RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 { RCLKE $end
+$var wire 1 | RE $end
+$var wire 10 } WADDR [9:0] $end
+$var wire 1 ~ WCLK $end
+$var wire 1 !" WCLKE $end
+$var wire 4 "" WDATA [3:0] $end
+$var wire 1 #" WE $end
+$var wire 16 $" _1_ [15:0] $end
+$var wire 16 %" _0_ [15:0] $end
+$var wire 4 &" RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 '" MASK [15:0] $end
+$var wire 11 (" RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 { RCLKE $end
+$var wire 1 | RE $end
+$var wire 11 )" WADDR [10:0] $end
+$var wire 1 ~ WCLK $end
+$var wire 1 !" WCLKE $end
+$var wire 16 *" WDATA [15:0] $end
+$var wire 1 #" WE $end
+$var wire 16 +" WMASK_I [15:0] $end
+$var wire 16 ," WDATA_I [15:0] $end
+$var wire 16 -" RMASK_I [15:0] $end
+$var wire 16 ." RDATA [15:0] $end
+$var reg 16 /" RDATA_I [15:0] $end
+$var integer 32 0" i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module mem_cell_6 $end
+$var wire 10 1" RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 2" RCLKE $end
+$var wire 1 3" RE $end
+$var wire 10 4" WADDR [9:0] $end
+$var wire 1 5" WCLK $end
+$var wire 1 6" WCLKE $end
+$var wire 4 7" WDATA [3:0] $end
+$var wire 1 8" WE $end
+$var wire 16 9" _1_ [15:0] $end
+$var wire 16 :" _0_ [15:0] $end
+$var wire 4 ;" RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 <" MASK [15:0] $end
+$var wire 11 =" RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 2" RCLKE $end
+$var wire 1 3" RE $end
+$var wire 11 >" WADDR [10:0] $end
+$var wire 1 5" WCLK $end
+$var wire 1 6" WCLKE $end
+$var wire 16 ?" WDATA [15:0] $end
+$var wire 1 8" WE $end
+$var wire 16 @" WMASK_I [15:0] $end
+$var wire 16 A" WDATA_I [15:0] $end
+$var wire 16 B" RMASK_I [15:0] $end
+$var wire 16 C" RDATA [15:0] $end
+$var reg 16 D" RDATA_I [15:0] $end
+$var integer 32 E" i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module mem_cell_7 $end
+$var wire 10 F" RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 G" RCLKE $end
+$var wire 1 H" RE $end
+$var wire 10 I" WADDR [9:0] $end
+$var wire 1 J" WCLK $end
+$var wire 1 K" WCLKE $end
+$var wire 4 L" WDATA [3:0] $end
+$var wire 1 M" WE $end
+$var wire 16 N" _1_ [15:0] $end
+$var wire 16 O" _0_ [15:0] $end
+$var wire 4 P" RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 Q" MASK [15:0] $end
+$var wire 11 R" RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 G" RCLKE $end
+$var wire 1 H" RE $end
+$var wire 11 S" WADDR [10:0] $end
+$var wire 1 J" WCLK $end
+$var wire 1 K" WCLKE $end
+$var wire 16 T" WDATA [15:0] $end
+$var wire 1 M" WE $end
+$var wire 16 U" WMASK_I [15:0] $end
+$var wire 16 V" WDATA_I [15:0] $end
+$var wire 16 W" RMASK_I [15:0] $end
+$var wire 16 X" RDATA [15:0] $end
+$var reg 16 Y" RDATA_I [15:0] $end
+$var integer 32 Z" i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module mem_cell_8 $end
+$var wire 10 [" RADDR [9:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 \" RCLKE $end
+$var wire 1 ]" RE $end
+$var wire 10 ^" WADDR [9:0] $end
+$var wire 1 _" WCLK $end
+$var wire 1 `" WCLKE $end
+$var wire 4 a" WDATA [3:0] $end
+$var wire 1 b" WE $end
+$var wire 16 c" _1_ [15:0] $end
+$var wire 16 d" _0_ [15:0] $end
+$var wire 4 e" RDATA [3:0] $end
+$scope module ram40_4kinst_physical $end
+$var wire 16 f" MASK [15:0] $end
+$var wire 11 g" RADDR [10:0] $end
+$var wire 1 # RCLK $end
+$var wire 1 \" RCLKE $end
+$var wire 1 ]" RE $end
+$var wire 11 h" WADDR [10:0] $end
+$var wire 1 _" WCLK $end
+$var wire 1 `" WCLKE $end
+$var wire 16 i" WDATA [15:0] $end
+$var wire 1 b" WE $end
+$var wire 16 j" WMASK_I [15:0] $end
+$var wire 16 k" WDATA_I [15:0] $end
+$var wire 16 l" RMASK_I [15:0] $end
+$var wire 16 m" RDATA [15:0] $end
+$var reg 16 n" RDATA_I [15:0] $end
+$var integer 32 o" i [31:0] $end
+$scope begin genblk1 $end
+$upscope $end
+$scope begin genblk2 $end
+$upscope $end
+$scope begin genblk3 $end
+$upscope $end
+$scope begin genblk4 $end
+$upscope $end
+$upscope $end
+$upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
-0(
-b10011 '
+b10000 o"
+bx n"
+b0x000x000x000x0 m"
+bx l"
+bz k"
+b1110111011101110 j"
+bz i"
+b0 h"
+b0xxxxxxxxxx g"
+bz f"
+bx e"
+b0z000z000z000z0 d"
+bz c"
+0b"
+bz a"
+0`"
+0_"
+b0 ^"
+1]"
+1\"
+bx ["
+b10000 Z"
+bx Y"
+b0x000x000x000x0 X"
+bx W"
+bz V"
+b1110111011101110 U"
+bz T"
+b0 S"
+b0xxxxxxxxxx R"
+bz Q"
+bx P"
+b0z000z000z000z0 O"
+bz N"
+0M"
+bz L"
+0K"
+0J"
+b0 I"
+1H"
+1G"
+bx F"
+b10000 E"
+bx D"
+b0x000x000x000x0 C"
+bx B"
+bz A"
+b1110111011101110 @"
+bz ?"
+b0 >"
+b0xxxxxxxxxx ="
+bz <"
+bx ;"
+b0z000z000z000z0 :"
+bz 9"
+08"
+bz 7"
+06"
+05"
+b0 4"
+13"
+12"
+bx 1"
+b10000 0"
+bx /"
+b0x000x000x000x0 ."
+bx -"
+bz ,"
+b1110111011101110 +"
+bz *"
+b0 )"
+b0xxxxxxxxxx ("
+bz '"
+bx &"
+b0z000z000z000z0 %"
+bz $"
+0#"
+bz ""
+0!"
+0~
+b0 }
+1|
+1{
+bx z
+b10000 y
+bx x
+b0x000x000x000x0 w
+bx v
+bz u
+b1110111011101110 t
+bz s
+b0 r
+b0xxxxxxxxxx q
+bz p
+bx o
+b0z000z000z000z0 n
+bz m
+0l
+bz k
+0j
+0i
+b0 h
+1g
+1f
+bx e
+b10000 d
+bx c
+b0x000x000x000x0 b
+bx a
+bz `
+b1110111011101110 _
+bz ^
+b0 ]
+b0xxxxxxxxxx \
+bz [
+bx Z
+b0z000z000z000z0 Y
+bz X
+0W
+bz V
+0U
+0T
+b0 S
+1R
+1Q
+bx P
+b10000 O
+bx N
+b0x000x000x000x0 M
+bx L
+bz K
+b1110111011101110 J
+bz I
+b0 H
+b0xxxxxxxxxx G
+bz F
+bx E
+b0z000z000z000z0 D
+bz C
+0B
+bz A
+0@
+0?
+b0 >
+1=
+1<
+bx ;
+b10000 :
+bx 9
+b0x000x000x000x0 8
+bx 7
+bz 6
+b1110111011101110 5
+bz 4
+b0 3
+b0xxxxxxxxxx 2
+bz 1
+bx 0
+b0z000z000z000z0 /
+bz .
+0-
+bz ,
+0+
+0*
+b0 )
+1(
+1'
 bx &
-b10011 %
+bx %
 bx $
 0#
 bx "
-b10011 !
+bx !
 $end
 #1
-1(
-b10011 &
+b1110111011101110 7
+b1110111011101110 L
+b1110111011101110 a
+b1110111011101110 v
+b1110111011101110 -"
+b1110111011101110 B"
+b1110111011101110 W"
+b1110111011101110 l"
+b0 2
+b0 &
+b0 G
+b0 ;
+b0 \
+b0 P
+b0 q
+b0 e
+b0 ("
+b0 z
+b0 ="
+b0 1"
+b0 R"
+b0 F"
+b0 g"
+b0 ["
 b0 "
 b0 $
 1#
 #2
 0#
 #3
+b0 e"
+b1000 P"
+b0 ;"
+b100 &"
+b10 o
+b110 Z
+b111 E
+b1000000001000010011001111111 !
+b1000000001000010011001111111 %
+b1111 0
+b0 m"
+b10000000000000 X"
+b0 C"
+b1000000000 ."
+b100000 w
+b1000100000 b
+b1000100010 M
+b10001000100010 8
+b0 n"
+b1000000000000 Y"
+b0 D"
+b100000000 /"
+b10000 x
+b100010000 c
+b100010001 N
+b1000100010001 9
 1#
 #4
 0#
@@ -49,9 +579,39 @@ b0 $
 #6
 0#
 #7
-b1000100110111 !
-b1000100110111 %
-b1000100110111 &
+b0 P"
+b1111 &"
+b0 o
+b1001 Z
+b11110000100111011111 !
+b11110000100111011111 %
+b1101 E
+b0 X"
+b10001000100010 ."
+b0 w
+b10000000000010 b
+b10001000000010 M
+b0 Y"
+b1000100010001 /"
+b0 x
+b1000000000001 c
+b1000100000001 N
+b1 2
+b1 &
+b1 G
+b1 ;
+b1 \
+b1 P
+b1 q
+b1 e
+b1 ("
+b1 z
+b1 ="
+b1 1"
+b1 R"
+b1 F"
+b1 g"
+b1 ["
 1#
 b100 "
 b100 $
@@ -66,9 +626,39 @@ b100 $
 #12
 0#
 #13
-b1000000000000010000000100010011 !
-b1000000000000010000000100010011 %
-b1000000000000010000000100010011 &
+b10 E
+b111 Z
+b10 o
+b1100 &"
+b111000010011100101111 !
+b111000010011100101111 %
+b1 ;"
+b100000 M
+b1000100010 b
+b100000 w
+b10001000000000 ."
+b10 C"
+b10000 N
+b100010001 c
+b10000 x
+b1000100000000 /"
+b1 D"
+b10 2
+b10 &
+b10 G
+b10 ;
+b10 \
+b10 P
+b10 q
+b10 e
+b10 ("
+b10 z
+b10 ="
+b10 1"
+b10 R"
+b10 F"
+b10 g"
+b10 ["
 1#
 b1000 "
 b1000 $
@@ -83,9 +673,42 @@ b1000 $
 #18
 0#
 #19
-b1111100000000000000001101111 !
-b1111100000000000000001101111 %
-b1111100000000000000001101111 &
+b10 P"
+b1000 ;"
+b1000 &"
+b0 o
+b1100 Z
+b10100010000000110010001111 !
+b10100010000000110010001111 %
+b1000 E
+b100000 X"
+b10000000000000 C"
+b10000000000000 ."
+b0 w
+b10001000000000 b
+b10000000000000 M
+b10000 Y"
+b1000000000000 D"
+b1000000000000 /"
+b0 x
+b1000100000000 c
+b1000000000000 N
+b11 2
+b11 &
+b11 G
+b11 ;
+b11 \
+b11 P
+b11 q
+b11 e
+b11 ("
+b11 z
+b11 ="
+b11 1"
+b11 R"
+b11 F"
+b11 g"
+b11 ["
 1#
 b1100 "
 b1100 $
@@ -100,9 +723,39 @@ b1100 $
 #24
 0#
 #25
-b11111101000000010000000100010011 !
-b11111101000000010000000100010011 %
-b11111101000000010000000100010011 &
+b100 E
+b110 Z
+b1000 o
+b101 ;"
+b10110001000011001001111 !
+b10110001000011001001111 %
+b0 P"
+b1000000000 M
+b1000100000 b
+b10000000000000 w
+b1000000010 C"
+b0 X"
+b100000000 N
+b100010000 c
+b1000000000000 x
+b100000001 D"
+b0 Y"
+b100 2
+b100 &
+b100 G
+b100 ;
+b100 \
+b100 P
+b100 q
+b100 e
+b100 ("
+b100 z
+b100 ="
+b100 1"
+b100 R"
+b100 F"
+b100 g"
+b100 ["
 1#
 b10000 "
 b10000 $
@@ -117,9 +770,42 @@ b10000 $
 #30
 0#
 #31
-b10100000010010011000100011 !
-b10100000010010011000100011 %
-b10100000010010011000100011 &
+b100 P"
+b100 ;"
+b1010 &"
+b1 o
+b111 Z
+b100010010100001011101011111 !
+b100010010100001011101011111 %
+b101 E
+b1000000000 X"
+b1000000000 C"
+b10000000100000 ."
+b10 w
+b1000100010 b
+b1000000010 M
+b100000000 Y"
+b100000000 D"
+b1000000010000 /"
+b1 x
+b100010001 c
+b100000001 N
+b101 2
+b101 &
+b101 G
+b101 ;
+b101 \
+b101 P
+b101 q
+b101 e
+b101 ("
+b101 z
+b101 ="
+b101 1"
+b101 R"
+b101 F"
+b101 g"
+b101 ["
 1#
 b10100 "
 b10100 $
